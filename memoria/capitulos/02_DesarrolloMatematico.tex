@@ -1,0 +1,184 @@
+%\documentclass[11pt,leqno]{book}
+%\usepackage[spanish,activeacute]{babel}
+%\usepackage[utf8]{inputenc}
+%\usepackage{enumerate}
+%
+%\begin{document}
+
+
+\chapter{Desarrollo matemático}
+
+\section{Análisis de Componentes Principales}
+
+Supongamos que tenemos un vector de variables aleatorias $X =  (X_1, \dots ,$ $X_n)^T$, donde cada variable aleatoria ha sido obtenida midiendo una cierta información. Teniendo en cuenta que se está midiendo información, es usual que haya gran cantidad de variables y que haya una cierta relación entre ellas. Las componentes principales son un conjunto de combinaciones lineales de las variables originales $X$ que a diferencia de estas están incorreladas entre sí, además de poseer otras propiedades estadísticas. El principal objetivo de las componentes principales es reducir la dimensión original, de forma que haya menos datos que guardar, pero intentando perder la menor cantidad de información posible. Esto se consigue buscando un nuevo sistema de ejes coordenados (que será una rotación del original) que serán las componentes principales y que intentarán explicar la estructura de covarianza del vector aleatorio $X$.\\
+
+Vamos a suponer el vector $X$ modelizado por una distribución normal $p$-dimensional de media cero y vamos a construir las componentes principales iterativamente haciendo uso de la técnica de los multiplicadores de Lagrange.\\
+
+\subsection{Definición de las componentes principales}
+
+Supongamos pues de aquí en adelante $X = (X_1, X_2, \dots, X_p)^T$ con matriz de covarianzas $\Sigma$ semidefinida positiva y con $\lambda_1 \geq \lambda_2 \geq \lambda_p \geq 0$ las raíces características correspondientes a $\Sigma$. Sean los vectores $l_i^T = (l_{i1}, l_{i2}, \dots, l_{ip}), i=1,\dots,p$ y sean las combinaciones lineales 
+\begin{equation*}
+  \left\lbrace
+  \begin{array}{l}
+     Y_1 = l_1^TX = l_{11}X_1 + \cdots + l_{1p}X_p \\
+     \vdots \\
+     Y_p = l_p^TX = l_{p1}X_1 + \cdots + l_{pp}X_p \\
+  \end{array}
+  \right.
+\end{equation*}
+
+Consideremos el vector aleatorio $Y=(Y_1, \dots, Y_p)^T$. Para cualesquiera dos componentes de $Y$, $i$ y $j$, tenemos que:
+\[	\var{(Y_i)} = \var{(l_i^TX)} = \mathbb{E}[(l_i^TX - \mathbb{E}[l_i^TX])^2] = \]
+Ahora, como el vector $l_i$ no depende de $X$ y dado que hemos supuesto que la media de $X$ es cero, nos queda:
+\[ = \mathbb{E}[(l_i^TX)^2] = \mathbb{E}[l_i^TXX^Tl_i] = l_i^T \mathbb{E}[XX^T] l_i \] 
+
+Vamos a desarrollar esta esperanza:
+\[	\mathbb{E}[XX^T] = \mathbb{E} \left[ \left( \begin{array}{c}
+X_1 \\
+\vdots \\
+X_p \end{array} \right)
+\left( \begin{array}{ccc}
+X_1 & \cdots & X_p  \end{array} \right) \right] = 
+\mathbb{E} \left[ \left( \begin{array}{cccc}
+X_1^2 & X_1X_2 & \cdots & X_1X_p \\
+\vdots & \vdots & \vdots & \vdots \\
+X_pX_1 & X_pX_2 & \cdots & X_p^2 \end{array} \right) \right]
+\]
+
+Ahora, como la esperanza de cada $X_i$ es cero, la esperanza de esa matriz es justo la matriz de covarianzas de $X$, $\Sigma$. Por tanto, la varianza de cada $Y_i$ nos queda $\var{(Y_i)} = l_i^T\Sigma l_i$.\\
+
+Veamos ahora la covarianza entre dos componentes $Y_i$ e $Y_j$, por un razonamiento semejante:
+
+\[ \cov{(Y_i, Y_j)} = \cov{(l_i^TX, l_j^TX)} = \mathbb{E}[(l_i^TX - \mathbb{E}[l_i^TX])(l_j^TX - \mathbb{E}[l_j^TX])] = \] 
+\[ = \mathbb{E}[(l_i^TX)(X^Tl_j)] = l_i \mathbb{E}[XX^T] l_j = l_i \Sigma l_j	\]
+
+Se llaman \textbf{componentes principales (CP)} a las combinaciones lineales $Y_1, \dots, Y_p$ que son incorreladas entre sí y tales que hacen máximas las varianzas $l_i^T\Sigma l_i,\ \ i=1,\dots,p$ sujetas a ciertas restricciones que pasamos a precisar.
+
+\subsection{Proceso de construcción de las CP}
+
+\begin{enumerate}
+\item Consideremos la combinación lineal de varianza máxima, a la que vamos a llamar $Y_1$, de forma que esta varianza será $\var{(Y_i)}=l_i^T \Sigma l_i$. Esta varianza aumentará si multiplicamos el vector $l$ por una constante positiva, de modo que vamos a imponer la restricción $l_i^Tl_i = 1$ para todo $i=1, \dots, p$.
+\item La primera componente principal será por tanto la combinación lineal $Y_1 = l_1^TX$ tal que hace máxima la varianza $l_1^T \Sigma l_1$ sujeta a la restricción $l_1^Tl_1 = 1$.
+\item Llamamos segunda componente principal a la combinación lineal $Y_2 = l_2^TX$ tal que hace máxima $\var{(Y_2)}$ con la restricción $l_2^Tl_2 = 1$ y con la restricción de ser incorrelada con $Y_1$, es decir, $\cov{(l_1^TX, l_2^TX)} = 0$.
+\item Continuamos el proceso hasta construir las $p$ combinaciones lineales $Y_1, \dots, Y_p$ definidas como aquellas que maximizan, para cualquier $i=1, \dots, p$, $\var{(l_i^TX)}$ sujetas a $l_i^Tl_i = 1$ y a $\cov{(l_i^TX, l_k^TX)} = 0$ para todo $k < i$. Cada uno de estos problemas de máximos condicionados se resuelven mediante multiplicadores de Lagrange.
+\end{enumerate}
+
+Vamos a ver ahora la resolución de dichos problemas de Lagrange para las dos primeras componentes principales y para una genérica $r$ con $ 1 \leq r \leq p$.
+
+\subsection{Cálculo de la primera componente principal}
+
+Se define la primera componente principal como 
+\[	Y_1 = l_1^TX, l_1^Tl_1 = 1	\]
+sujeta a 
+\[	\var{(Y_1)} = l_1^T\Sigma l_1 = \underset{l}{\text{máx}}\ \var{(l^TX)}	\]
+
+Por lo tanto, tenemos que resolver el siguiente problema de multiplicadores de Lagrange:
+\begin{equation*}
+  \left\lbrace
+  \begin{array}{l}
+     \underset{l}{\text{máx}}\ \var{(l^T\Sigma l)} \\
+     l^Tl=1 \\
+  \end{array}
+  \right.
+\end{equation*}
+
+Definimos la función de Lagrange $\mathcal{L}_1(l, \lambda) = l^T \Sigma l - \lambda(l^Tl - 1)$
+y derivamos a igualamos a cero para resolver.\\
+
+Para derivar $l^Tl$, con $l$ un vector, con respecto a $l$, tenemos que tener en cuenta que 
+\[	l^Tl = \sum_{i=1}^p l_i^2	\]
+y si hacemos el gradiente, nos queda $2(l_1, l_2, \dots, l_p)^T = 2l$.\\
+
+Para derivar $l^T \Sigma l$ con respecto a $l$ sólo tenemos que tener en cuenta que la matriz $\Sigma$ es simétrica y la proposición sobre derivación de una forma cuadrática en el capítulo de introducción, con lo que nos queda que $\frac{\partial l^T \Sigma l}{\partial l} = 2 \Sigma l$.
+
+Por tanto, si derivamos e igualamos a cero en $\mathcal{L}_1(l, \lambda) = l^T \Sigma l - \lambda(l^Tl - 1)$ nos queda:
+
+\[	\frac{\partial \mathcal{L}_1(l, \lambda)}{\partial l} = 2 \Sigma l - 2 \lambda l = 0 \Rightarrow (\Sigma - \lambda I)l = 0
+	\]
+
+Para poder obtener una solución de $(\Sigma - \lambda I)l = 0$ con $l^Tl=1$ tiene que darse $l \neq 0$ y por tanto para que el sistema de ecuaciones tenga solución tiene que darse $|\Sigma - \lambda I| = 0$ lo que implica que $\lambda$ es un valor propio de $\Sigma$.\\
+Ahora, si multiplicamos $(\Sigma - \lambda I)l = 0$ por $l^T$ a la izquierda, obtenemos:
+$l^T \Sigma l - \lambda l^Tl = 0 \Rightarrow l^T \Sigma l = \lambda$, es decir, $\lambda$ es la varianza de $Y_1$. Por tanto, para tener máxima varianza tenemos que utilizar $\lambda = \lambda_1$ el mayor valor propio de $\Sigma$. Ahora, $\var{(Y_1)} = l^T \Sigma l = \lambda_1 \Rightarrow \Sigma l = l \lambda_1 = \lambda_1 l$ ya que $l^Tl=1$, y el vector $l$ que cumple $\Sigma l = \lambda_1 l$ es $l = e_1$ el vector propio asociado al valor propio $\lambda_1$.\\
+
+Tenemos por tanto que la primera componente principal es $Y_1$ = $e^T_1X$ con $e_1^Te_1 = 1$, $e_1$ el vector propio asociado al mayor valor propio $\lambda_1$ de $\Sigma$ la matriz de covarianzas del vector $X$.
+
+\subsection{Cálculo de la segunda componente principal}
+
+Tenemos que obtener ahora una segunda combinación lineal $Y_2 = l^TX$ con $l^Tl=1$, incorrelada con $Y_1$ y que maximice la varianza de nuevo. Es decir, tenemos que resolver el problema:
+\[	\underset{l}{\text{máx}}\ \var{(l^TX)} \ \ \text{sujeto a} \ \  l^Tl = 1,\ \ \cov{(Y_2, Y_1)} = l^T \Sigma e_1 = 0	\]
+
+De la restricción $l^T \Sigma e_1 = 0$ y utilizando que $\Sigma e_1 = \lambda_1 e_1$ por ser $e_1$ vector propio de $\Sigma$, nos queda $l^T \lambda_1 e_1 = \lambda_1 l^T e_1 = 0$ y como $\lambda_1 \neq 0$ siempre que $\Sigma \neq 0$ por ser $\lambda_1$ el mayor valor propio de $\Sigma$, nos queda que $l^T e_1 = 0$, es decir, $l$ y $e_1$ son ortogonales.\\
+
+Para resolver el problema definimos la función de Lagrange con dos multiplicadores
+\[	\mathcal{L}_2(l, \lambda, v) = l^T \Sigma l - \lambda (l^Tl - 1) - v(l^T \Sigma e_1) 	\]
+y derivamos e igualamos a cero para resolver y encontrar el máximo:
+\[	\frac{\partial \mathcal{L}_2(l, \lambda, v)}{\partial l} = 2 \Sigma l - 2 \lambda l - v l^T \Sigma e_1 =	\]
+
+Multiplicando por la izquierda por $e_1^T$ y utilizando que $\Sigma e_1 = \lambda_1 e_1$ y que $e_1^T e_1 = 1$ nos queda:
+\begin{equation} \label{eq:CP2}
+	2 e_1^T \Sigma l - 2 \lambda e_1^T l - v \lambda_1 e_1^T e_1 = 2 e_1^T \Sigma l - 2 \lambda e_1^T l - v \lambda_1 =
+\end{equation}
+
+Como $l$ y $e_1$ son ortogonales:
+\[	= 2 e_1^T \Sigma l - v \lambda_1 = 2 \cov{(Y_1, Y_2)} - v \lambda_1 = -v \lambda_1	\]
+ya que $Y_1$ e $Y_2$ están incorreladas, con lo que nos queda que $-v \lambda_1 = 0 \Rightarrow v = 0$.
+
+Entonces, volviendo a la expresión (\ref{eq:CP2}) y sabiendo que $v=0$ nos queda de nuevo que tiene que cumplirse que $(\Sigma - \lambda I) l = 0 \Rightarrow |\Sigma - \lambda I| = 0$, con lo que $\lambda$ tiene que ser de nuevo un valor propio de $\Sigma$ y $\var{(Y_2)} = \lambda$ por el mismo razonamiento que con la primera componente principal, y si queremos que sea máxima tenemos que elegir $\lambda_2$ el segundo mayor valor propio de $\Sigma$ y como $l$ el vector propio asociado, $e_2$. Por tanto, la segunda componente principal es $Y_2 = e_2^TX$.
+
+\subsection{Cálculo de la $(r+1)$-ésima componente principal con $1 \leq r+1 \leq p$ }
+
+En este caso tenemos 
+\[	Y_{r+1} = l^TX\ \ \text{sujeta a}\ \ l^Tl = 1,\  l^T\Sigma e_i = 0, \ i = 1, \dots, r	\]
+y se define la función de Lagrange
+\[	\mathcal{L}_{r+1}(l, \lambda, \mathbf{v}) = l^T \Sigma l - \lambda (l^T l - 1) - \sum_{i=1}^r v_i l^T \Sigma e_i	\]
+con $\mathbf{v} = (v_1, v_2, \dots, v_r)$.\\
+
+\begin{proposicion}
+Con la función de Lagrange que acabamos de definir y suponiendo que los valores propios de $\Sigma$, $\lambda_i \neq 0,\  i=1, \dots, r$, entonces $v_i = 0, \  i=1, \dots, r$ y el problema de maximización anterior se reduce a $(\Sigma - \lambda I)l = 0$
+\end{proposicion}
+\textbf{Demostración}\\
+
+Comenzamos derivando la función de Lagrange con respecto a $l$:
+\begin{equation}\label{eq:CPr}
+	\frac{\partial \mathcal{L}_{r+1}(l, \lambda, \mathbf{v})}{\partial l} = 2 \Sigma l - 2 \lambda l - \sum_{i=1}^r v_i \Sigma e_i
+\end{equation}
+e igualando a cero. Multiplicamos (\ref{eq:CPr}) por $e_j^T$ por la izquierda con $j \in \{1, \dots, r\}$
+\[	2 e_j^T \Sigma l - 2 \lambda e_j^T l - \sum_{i=1}^r v_i e_j^T \Sigma e_i = 0	\]
+
+Utilizamos ahora que $\Sigma e_i = \lambda_i e_i$ para todo $i = 1, \dots, r$ y que $l$ es ortogonal con $e_j$ por ser $Y_{r+1}$ e $Y_j$ incorreladas, tenemos:
+\[ - \sum_{i=1}^r v_i e_j^T \lambda_i e_i = 0	\]
+Por construcción, $e_i$ es ortogonal a $e_j$ excepto cuando $i=j$ y $e_j^T e_j = 1$, con lo cual:
+\[	- \sum_{i=1}^r v_i e_j^T \lambda_i e_i = - v_j \lambda_j e_j^T e_j = - v_j \lambda_j = 0	\]
+
+Con lo que $v_j = 0$ por hipótesis. Como esto lo hemos hecho para $j \in \{1, \dots, r \}$ nos queda que $v_i = 0$ para todo $i$ entre $1$ y $r$, como queríamos demostrar, y si volvemos a la ecuación (\ref{eq:CPr}) y utilizamos esta información nos queda
+\[	2 \Sigma l - 2 \lambda l = 0 \Rightarrow (\Sigma - \lambda I) l = 0 \]
+
+\begin{flushright}
+$\blacksquare$
+\end{flushright}
+
+Si $\lambda_{r+1} \neq 0$, por un razonamiento análogo a las componentes primera y segunda, este problema se resuelve tomando $\lambda = \lambda_{r+1}$ y $l = e_{r+1}$ y se obtiene la $(r+1)$-ésima componente principal $Y_{r+1} = e^T_{r+1}X,\ \var{(Y_{r+1})} = \lambda_{r+1}$.\\
+%????????
+Por otro lado, si $\lambda_{r+1} = 0,\ \lambda_i \neq 0,\ i \neq r+1$, se puede reemplazar $e_{r+1}$ por una combinación lineal de $e_{r+1}$ y los $e_j$ de forma que $\lambda_j \neq 0$ definiendo así un nuevo $e_{r+1}'$ que es ortogonal a todos los $e_j$ con $j = 1, \dots, r$.\\
+%??????????
+
+De esta forma construimos una matriz con los vectores propios $E = (e_1, \dots, e_p)$ y otra matriz con los valores propios, diagonal en este caso, $\Lambda = diag(\lambda_1, \dots, \lambda_p)$ con $\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_p \geq 0$. Como $E^T E = I$ y $\Sigma E = E \Lambda$, tenemos que $E^T \Sigma E = \Lambda$.\\
+
+En el caso de que $\Sigma$ tenga raíces múltiples, tenemos el siguiente teorema:
+
+\begin{teorema}
+Si $\lambda_{r+1} = \cdots = \lambda_{r+m} = \lambda$, entonces $\Sigma - \lambda I$ es de rango $p-m$. Los correspondientes vectores característicos $e_{r+1}, \dots, e_{r+m}$ están unívocamente determinados, salvo multiplicación por la derecha por una matriz ortogonal.
+\end{teorema}
+
+\textbf{Demostración}\\
+
+Como la $i$-ésima columna de $E$ es $e_r$, vector propio, se da que $(\Sigma - \lambda_i I)e_i = 0$, y por lo tanto tenemos que esto se cumple para todo $i = r+1, \dots, r+m$ y en concreto podemos escribir $(\Sigma - \lambda I)e_i = 0$. Esto implica que $e_{r+1}, \dots, e_{r+m}$ son soluciones de $(\Sigma - \lambda I)e = 0$. Para ver que son linealmente independientes basta darse cuenta de que $\Sigma$ es una matriz real simétrica y por tanto, diagonalizable, por lo que existe una matriz ortogonal $P$ de forma que $\Sigma P = PD$, con $D$ diagonal. Las columnas de $P$ son vectores propios y forman una base, por lo que tienen que ser linealmente independientes. Esto implica que la multiplicidad algebraica y geométrica de $\Sigma$ coinciden, y por tanto si el valor propio $\lambda$ tiene multiplicidad algebraica igual a $m$, entonces hay exactamente $m$ vectores propios linealmente independientes, $e_{r+1}, \dots, e_{r+m}$, y por tanto el rango de la matriz $\Sigma - \lambda I$ es $p-m$.\\ %???????
+
+Ahora, como $E^* = (e_{r+1},\dots, e_{r+m})$ es un conjunto de soluciones de $(\Sigma - \lambda I) e = 0$ linealmente independiente, cualquier otra solución debe ser combinación lineal de los elementos de $E^*$, es decir, se pueden escribir el resto de soluciones como $E^*A$ con $A$ matriz no singular. Sin embargo, todos los elementos de $E^*$ cumplen la condición de ortogonalidad $e_i^T e_i = 1 \Rightarrow E^{*T} E = I$ que aplicadas a las combinaciones lineales nos da $I = (E^*A)^T (E^*A) = A^TE^{*T}E^*A = A^TA$, por lo que $A$ es ortogonal.
+
+\begin{flushright}
+$\blacksquare$
+\end{flushright}
+
+
+%\end{document}

@@ -1,0 +1,152 @@
+%\documentclass[11pt,leqno]{book}
+%\usepackage[spanish,activeacute]{babel}
+%\usepackage[utf8]{inputenc}
+%\usepackage{enumerate}
+%\usepackage{float}
+%\usepackage{gensymb}
+%
+%\begin{document}
+
+
+\chapter{Introducción}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\section{Algunos conceptos sobre estadística}
+
+\begin{definicion}[Varianza]
+	Dada una variable aleatoria $\mathbf{X}$, la varianza de dicha variable se define como la desviación cuadrática media respecto de la esperanza de la misma variable:
+	\[	\var{(\mathbf{X})} = \mathbb{E}[(\mathbf{X} - \mathbb{E}[\mathbf{X}])^2]	\]
+	donde $\mathbb{E}[\mathbf{X}]$ denota la esperanza de la variable $\mathbf{X}$ con respecto a una distribución de probabilidad $\mathbb{P}(x)$.
+\end{definicion}
+
+La varianza es un indicador de la representatividad de la esperanza: a mayor varianza menor representatividad.\\
+
+En concreto, si la variable $\mathbf{X}$ es discreta y conocemos un conjunto de $N$ datos de la misma, $\{x(t); t=1,\dots,N\}$, podemos calcular la varianza de los datos como 
+\[	\var{(x)} = \frac{1}{N} \sum_{t=1}^N(x(t)-\bar{x})^2	\]
+con $\bar{x}$ denotando la esperanza o media aritmética de los datos.
+
+\begin{definicion}[Covarianza]
+	Dadas dos variables aleatorias $\mathbf{X}$ e $\mathbf{Y}$, se define la covarianza entre ellas como
+	\[	\cov{(\mathbf{X}, \mathbf{Y})} = \mathbb{E}[(\mathbf{X}-\mathbb{E}[\mathbf{X}])(\mathbf{Y}-\mathbb{E}[\mathbf{Y}])]	\]
+\end{definicion}
+
+Una de las ventajas de la covarianza es que nos da una idea de cómo de relacionadas linealmente están las variables. De esta forma, si la covarianza es nula, las variables no están relacionadas linealmente, y si el valor de la misma es grande (ya sea positivo o negativo) entonces las variables cambian mucho y están lejos de sus medias al mismo tiempo, es decir, cuando una de ellas está lejos de su media la otra también lo está de la suya.
+
+\begin{definicion}[Matriz de covarianzas]
+	Sea $\mathbf{X}$ un vector de variables aleatorias $\mathbf{X}=(\mathbf{X}_1, \cdots, \mathbf{X}_n)^T$ de forma que cada $\mathbf{X}_i,\ i=1, \dots, n$ tiene varianza finita. Se define la matriz de covarianzas de $\mathbf{X}$ como la matriz que contiene la covarianza entre los elementos del vector, es decir, cada posición $(i,j)$ se define como 
+	\[ \cov{(\mathbf{X}_i, \mathbf{X}_j)} = \mathbb{E}[(\mathbf{X}_i - \mathbb{E}[\mathbf{X}_i])(\mathbf{X}_j - \mathbb{E}[\mathbf{X}_j])]	\]
+	Notaremos a esta matriz $\Sigma$.
+\end{definicion}
+
+Notemos que la matriz de covarianzas es simétrica en tanto que $\cov{(\mathbf{X}, \mathbf{Y})} = \cov{(\mathbf{Y}, \mathbf{X})}$. Además, los elementos de la diagonal corresponden con las varianzas de los elementos del vector.\\
+
+Es necesario que las varianzas de cada variable aleatoria sean finitas para que la matriz esté bien definida (es decir, que ninguna componente sea infinito). Notemos que si la varianza de todas las variables es finita entonces las covarianzas también, ya que entonces cada $(\mathbf{X}_i - \mathbb{E}[\mathbf{X}_i])$ es finita.
+
+\begin{definicion}[Autocovarianza de orden k]
+Si tenemos una variable aleatoria $\mathbf{Y}$ discreta y conocemos un conjunto de $N$ datos de la misma, $\{y(t); t=1,\dots,N\}$, podemos definir la autocovarianza de orden k como:
+\[	c_y(k) = \frac{1}{N} \sum_{t=1}^{N-k}(y(t)-\bar{y})(y(t+k)-\bar{y})	\]
+\end{definicion}
+
+\begin{definicion}[Autocorrelación de orden k]
+Si tenemos una variable aleatoria $\mathbf{Y}$ discreta de la que conocemos sus autocovarianzas de orden 0 (varianza) y orden k, podemos definir la autocorrelación de orden k como el coeficiente:
+\[	r_y(k) = \frac{c_y(k)}{c_y(0)}	\]
+
+Al conjunto de todas las autocorrelaciones lo llamamos \textbf{función de autocorrelación (ACF)}.
+\end{definicion}
+
+\begin{definicion}[Autocorrelación parcial de orden k]
+Si tenemos una variable aleatoria $\mathbf{Y}$ discreta y conocemos un conjunto de $N$ datos de la misma, $\{y(t); t=1,\dots,N\}$ podemos definir la autocorrelación parcial de orden k como un coeficiente $\phi_y(k)$ de forma que:
+\[	y(t) = a_0 + a_1y(t-1)+\cdots + a_{k-1}y(t-k+1) + \phi_y(k)y(t-k)	\]
+
+$\phi_y(k)$ mide el grado de asociación lineal (correlación) entre $y(t)$ e $y(t-k)$ cuando se cancela el efecto de las variables intermedias. Al conjunto de las autocorrelaciones parciales se le llama \textbf{función de autocorrelación parcial (PACF)}.
+\end{definicion}
+
+\begin{definicion}[Distribución normal]
+\end{definicion}
+
+\begin{definicion}[Distribución normal multivariante]
+\end{definicion}
+
+\section{Multiplicadores de Lagrange}
+
+\begin{definicion}[Función de Lagrange]
+Supongamos $M$ una variedad de dimensión $k=m-n$ determinada por una función vectorial $g: \Omega \rightarrow \mathbb{R}^m$ de clase $\mathcal{C}^q$ en un abierto $\Omega \subset \mathbb{R}^n$ y tal que el rango $Dg(\mathbf{x}) = m < n$ para todo $\mathbf{x} \in \Omega$, donde $D$ representa la matriz jacobiana de g, y supongamos $f: \Omega \rightarrow \mathbb{R}$ un campo escalar de clase $\mathcal{C}^q$ en $\Omega$. Entonces podemos definir la función de Lagrange $\mathcal{L}: \Omega \times \mathbb{R}^m \rightarrow \mathbb{R}$ como:
+\[	\mathcal{L}(\mathbf{x}, \mathbf{\lambda}) = f(\mathbf{x}) + \sum_{i=1}^{m} \lambda_ig_i(\mathbf{x}), \ \ \  \mathbf{x} = (x_1, x_2, \dots, x_n) \in \Omega, \mathbf{\lambda} = (\lambda_1, \lambda_2, \dots, \lambda_m) \in \mathbb{R}^m	\]
+\end{definicion}
+
+\begin{teorema}[de Lagrange]
+Supongamos que $f$ tiene en $\mathbf{a} \in M$ un extremo local condicionado por $M$. Entonces existe un único vector $\mathbf{\lambda} \in \mathbb{R}^m$ tal que $(\mathbf{a}, \mathbf{\lambda})$ es un punto crítico de $\mathbf{\lambda}$, es decir, $\nabla \mathcal{L}(\mathbf{a}, \mathbb{\lambda}) = 0$
+\end{teorema}
+
+Los números $\lambda_1, \dots, \lambda_m$ en el teorema se llaman \textit{multiplicadores de Lagrange} de $\mathbf{a}$. Nos dan una forma práctica de resolver problemas de extremos condicionados mediante un sistema de $n+m$ ecuaciones.
+
+\section{Sobre matrices simétricas y formas cuadráticas}
+Vamos a ver algunas propiedades determinadas sobre matrices simétricas que vamos a utilizar más adelante.\\
+
+\textbf{Propiedades de matrices simétricas}
+\begin{enumerate}
+\item Todos sus valores propios son reales.
+\item Se pueden clasificar según el signo de sus valores propios en:
+\begin{enumerate}
+\item \textit{Definida positiva}: Si $\lambda_i > 0$ para todo $\lambda_i$ valor propio.
+\item \textit{Semidefinida positiva}: Si $\lambda_i \geq 0$ para todo $\lambda_i$ valor propio.
+\item \textit{Semidefinida negativa}: Si $\lambda_i \leq 0$ para todo $\lambda_i$ valor propio.
+\item \textit{Definida negativa}: Si $\lambda_i < 0$ para todo $\lambda_i$ valor propio.
+\item \textit{Indefinida}: En cualquier otro caso.
+\end{enumerate}
+\end{enumerate}
+
+\begin{definicion}[Forma cuadrática]
+Sea $x$ un vector de $\mathbb{R}^n$ y $A$ una matriz cuadrada de orden $n$ simétrica. Una forma cuadrática es una aplicación de $\mathbb{R}^n$ en $\mathbb{R}$ que a cada $x$ le hace corresponder $x^TAx$.
+\end{definicion}
+
+\begin{proposicion}[Derivación de una forma cuadrática]
+Dada la forma cuadrática $x^TAx$, se verifica que es diferenciable y para cada $x \in \mathbb{R}^n$:
+\[	\frac{\partial x^TAx}{\partial x} = 2Ax	\]
+donde $\frac{\partial}{\partial x}$ denota el gradiente con respecto al vector $x$.
+\end{proposicion}
+\textbf{Demostración}\\
+\[	x^TAx = \left( \begin{array}{cccc}
+x_1 & x_2 & \cdots & x_n  \end{array} \right)
+\left( \begin{array}{cccc}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\cdots & \cdots & \cdots & \cdots \\
+a_{n1} & a_{n2} & \cdots & a_{nn} \end{array} \right)
+\left( \begin{array}{c}
+x_1 \\
+x_2 \\
+\cdots \\
+x_n \end{array} \right) =
+\]
+\[ = \sum_{i=1}^n \sum_{j=1}^n a_{ij}x_ix_j	\]
+
+Tenemos que derivar ahora esta suma con respecto a cada componente de $x$. Sea $1 \leq k \leq n$ la componente respecto a la que estamos derivando, entonces 
+\[	\frac{\partial x^TAx}{\partial x_k} = \sum_{i=1}^n \sum_{j=1}^n a_{ij} \frac{\partial}{\partial x_k} (x_ix_j)	\]
+y cada $\frac{\partial}{\partial x_k} x_ix_j$ puede ser:
+\begin{enumerate}
+\item 0 si $i \neq k \neq j$
+\item $x_j$ si $i = k \neq j$
+\item $x_i$ si $ i \neq k = j$
+\item $2x_i$ si $i = k = j$
+\end{enumerate}
+
+Por tanto, tenemos:
+\[	\frac{\partial x^TAx}{\partial x_k} = (a_{1k} + a_{k1})x_1 + (a_{2k} + a_{k2})x_2 + \cdots + (a_{kn}+a_{nk})x_n	\]
+y como $A$ es simétrica, se da que $a_{ij} = a_{ji}$ para todos $i$ y $j$ entre $1$ y $n$, luego:
+\[	\frac{\partial x^TAx}{\partial x_k} = \sum_{i=1}^n 2a_{ik}x_i	\]
+y por tanto
+\[	\frac{\partial x^TAx}{\partial x} = 2
+\left( \begin{array}{c}
+\sum_{i=1}^n a_{i1}x_i \\
+\sum_{i=1}^n a_{i2}x_i \\
+\cdots \\
+\sum_{i=1}^n a_{in}x_i \end{array} \right) = 2Ax	\]
+\begin{flushright}
+$\blacksquare$
+\end{flushright}
+
+
+
+%\end{document}
