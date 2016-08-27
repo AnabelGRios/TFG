@@ -45,7 +45,7 @@ Es necesario que las varianzas de cada variable aleatoria sean finitas para que 
 
 \begin{definicion}[Autocovarianza de orden k]
 Si tenemos una variable aleatoria $\mathbf{Y}$ discreta y conocemos un conjunto de $N$ datos de la misma, $\{y(t); t=1,\dots,N\}$, podemos definir la autocovarianza de orden k como:
-\[	c_y(k) = \frac{1}{N} \sum_{t=1}^{N-k}(y(t)-\bar{y})(y(t+k)-\bar{y})	\]
+\[	c_y(k) = \cov{(y_t, y_{t+k})} = \frac{1}{N} \sum_{t=1}^{N-k}(y(t)-\bar{y})(y(t+k)-\bar{y})	\]
 \end{definicion}
 
 \begin{definicion}[Autocorrelación de orden k]
@@ -146,6 +146,32 @@ y por tanto
 \begin{flushright}
 $\blacksquare$
 \end{flushright}
+
+\section{Filtros digitales lineales}
+
+Son un sistema que transforma una señal de entrada $\{e(t);\ t=1,2,\dots\}$ en una señal de salida $\{y(t);\ t=1,2,\dots \}$ que será una función lineal de la señal de entrada, concretamente una convolución discreta de $e(t)$ y otra cierta función $h(t)$:
+\[	y(t) = \sum_{k=0}^{\infty} h_k e(t-k) = h(t) \ast e(t) = h_0 e(t) + h_1 e(t-1) + \cdots	\]
+
+\begin{definicion}[Filtro estable]
+Se dice que un filtro es estable si para toda entrada acotada la salida sigue siendo acotada: $|e(t)|$ acotada $\Rightarrow \ |y(t)|$ acotada, y esto se da si y sólo si
+\[ \sum_{k=0}^{\infty} |h(k)| < \infty 	\]
+por la definición de la salida del filtro.
+\end{definicion}
+
+\begin{nota}
+Podemos definir el operador retardo:
+\[	q^{-1}e(t) \equiv e(t-1)	\]
+\[	q^{-k}e(t) \equiv e(t-k)	\]
+y con esta notación podemos escribir la salida del filtro como
+\[	y(t) = H(q)e(t) = \sum_{k=0}^{\infty} h_k q^{-k} e(t) = h_0q^{-0}+h_1q^{-1}e(t)+ \cdots = \]
+\[ = h_0e(t) + h_1e(t-1) + \cdots	\]
+De esta forma $H(q)$ se llama la función de transferencia del filtro digital $H(q) = \sum_{k=0}^{\infty} h_k q^{-k}$.
+\end{nota}
+
+MAAAAAAAAAAAAL
+
+Normalmente la convolución para obtener la salida en el filtro digital se hace con la transformada discreta de Fourier, definida como
+\[ Y_N(\omega) = \frac{1}{\sqrt{N}} \sum_{t=1}^N y(t) e^{-j \omega t}	\]
 
 
 

@@ -180,5 +180,126 @@ Ahora, como $E^* = (e_{r+1},\dots, e_{r+m})$ es un conjunto de soluciones de $(\
 $\blacksquare$
 \end{flushright}
 
+\section{Introducción a las Series Temporales}
+
+\begin{definicion}[Serie temporal]
+Una serie temporal (o serie cronológica) es un conjunto de observaciones de valores de una variable generadas secuencialmente en el tiempo, normalmente a intervalos regulares: $\{y(t); t=1,2,\dots, N\}$
+\end{definicion}
+
+De forma informal, decimos que si la serie temporal oscila alrededor de un valor constante, se llamará serie estacionaria. En caso contrario, se llamará no estacionaria. La definición estricta es la siguiente:
+\begin{definicion}[Serie estacionaria]
+Una serie temporal es estacionaria si se cumplen las dos siguientes condiciones:
+\begin{enumerate}
+\item Las distribuciones marginales de todas las variables son iguales.
+\item Las distribuciones finito-dimensionales de cualquier conjunto de variables sólo dependen de los retardos entre ellas.
+\end{enumerate}
+\end{definicion}
+En particular, estas condiciones implican que la media y la varianza son constantes y que la covarianza entre dos variables $y(t)$ e $y(t+k)$ sólo depende de $k$, es decir, las propiedades estadísticas son independientes del instante de tiempo en el que se observan las muestras.\\
+
+
+Es interesante construir modelos para representar la evolución de una serie temporal y hacer predicciones sobre valores futuros de la misma. Estos modelos se basan en valores pasados y en la hipótesis de que las condiciones futuras serán análogas a las pasadas, de forma que si conocemos los valores pasados se pueden utilizar para hacer una predicción sobre valores futuros. La \textbf{ecuación general para el modelado de una serie temporal} es la siguiente:
+\[	y(t) = F(y(t-1), y(t-2), \dots, y(t-"\infty ")) + e(t)	\]
+donde $e(t)$ es un componente aleatorio que recoge el resto de efectos que actúan sobre la serie. Sobre esta secuencia de variables aleatorias se supone que son independientes entre sí y que siguen una distribución normal de media cero y varianza constante.\\
+Si existe otro conjunto de variables que puedan explicar el modelo (variables exógenas o explicativas) la ecuación pasa a ser:
+\[	y(t) = F(y(t-1), y(t-2), \dots, x(t), x(t-1), \dots) + e(t)	\]
+y el problema pasa a denominase \textit{Modelado de sistemas}.\\
+
+\begin{nota}
+De aquí en adelante, se utilizará, para series temporales, la notación $\widehat{y}(t)$ para notar un valor predicho de la serie $y(t)$.
+\end{nota}
+
+El objetivo es por tanto predecir $\widehat{y}(t+h)$. A $h$ se le llama \textbf{horizonte de la predicción}. Hay varias formas de hacerlo:
+\begin{enumerate}
+\item \textbf{Método directo}: Se busca un modelo exactamente de la forma
+\[	y(t+h) = F(y(t-1), y(t-2),\dots) + e(t)	\]
+\item \textbf{Método recursivo}: Se aplica el modelo más general
+\[	y(t) = F(y(t-1), y(t-2),\dots)+e(t)	\]
+de forma recursiva hasta obtener el horizonte que deseamos predecir
+\[	\widehat{y}(t+1) = F(y(t), y(t-1), y(t-2),\dots)	\]
+\[	\widehat{y}(t+2) = F(\widehat{y}(t+1),y(t),y(t-1),\dots)	\]
+\[ \vdots	\]
+\end{enumerate}
+
+Además hay muchos tipos de modelos, que se pueden clasificar según la función $F$ sea lineal: modelos AR, MA, ARMA, ARIMA, SARIMA, ARX, etc., o no lineal: funciones de base radial (RBF), perceptrones multicapa (MLP), sistemas difusos, máquinas de vectores soporte (SVM), etc.\\
+
+Llegados a este punto, conviene preguntarse cuántas y qué variables conviene utilizar en la predicción, ya que puede que no todas influyan lo mismo en los valores futuros y utilizarlas todas no es computacionalmente eficiente. Además, habrá que elegir también qué modelo utilizar para la predicción.\\
+
+\subsection{Proceso de ruido blanco}
+
+Dado un conjunto infinito de muestras $\{e(t); t=1,2,\dots\}$, decimos que $\{e(t)\}$ es una señal de ruido blanco si es una secuencia de variables incorreladas de media cero y varianza constante, es decir, si
+\begin{equation*}
+	r_e(k) = 
+  \left\lbrace
+  \begin{array}{l}
+     1 \ \ \ \ k = 0 \\
+     0 \ \ \ \ k \neq 0 \\
+  \end{array}
+  \right.
+\end{equation*}
+con $r_e(k)$ la autocorrelación de orden $k$. Esto es así porque $\cov{(e(t),e(t+k))} = 0$ siempre que $k \neq 0$, es decir, las muestras están incorreladas para todos los desfases temporales y por tanto conocer los valores pasados no da información sobre los valores futuros.\\
+Si cogemos una muestra finita de $N$ valores de una señal de ruido blanco obtenemos (para $k \neq 0$) que
+\[	r_e(k) \sim \mathcal{N} \left( 0, \frac{1}{N} \right), \ \ \ \ \phi_e(k) \sim \mathcal{N} \left( 0, \frac{1}{N} \right)	\]
+
+es decir, tanto la función de autocorrelación como la función de autocorrelación parcial siguen una normal de media cero y varianza $1/N$. Esto nos sirve para identificar una señal de ruido blanco, que no sería posible sólo viendo representada la serie temporal. De esta forma lo que tenemos que hacer es calcular las funciones de autocorrelación y autocorrelación parcial y utilizar la propiedad de la distribución normal de que al obtener una muestra de esta distribución hay un $95,44\%$ de que pertenezca al intervalo $[\mu - 2 \sigma, \mu + 2 \sigma]$ con $\mu$ notando la media y $\sigma$ la desviación típica. Por tanto, basta con comprobar si el $95\%$ de dichas funciones en la muestra que disponemos de la serie temporal se queda en el intervalo $[- \frac{2}{\sqrt{N}}, \frac{2}{\sqrt{N}}]$.\\
+
+Es importante conocer y saber identificar una señal de ruido blanco para no intentar predecir valores futuros sobre ellas con los valores pasados.
+
+\subsection{Modelos ARMA}
+
+Dada una serie temporal $\{y(t);\ t=1,\dots,N\}$ a la que suponemos con media cero, podemos modelar dicha serie mediante una relación lineal del tipo
+\[	y(t) = - \sum_{k=1}^{\infty} a_k y(t-k) + e(t) \]
+con $a_i$ constantes, o, equivalentemente, con la notación introducida en la sección 4 del primer capítulo,
+\[	A_{\infty}(q)y(t) = e(t), \ \ \ \ A_{\infty}(q) \equiv 1 + \sum_{k=1}^{\infty} a_k q^{-k}	\]
+
+Si despejamos de la primera expresión $y(t)$ nos queda:
+\[	y(t) = \frac{1}{A_{\infty}(q)}e(t) \equiv H_{\infty}(q)e(t) = \sum_{k=0}^{\infty} h_k e(t-k) = h(t) \ast e(t)	\]
+
+que es la expresión de un filtro digital lineal al que le estamos metiendo como entrada un ruido blanco.\\
+
+Con un número infinito de parámetros, los modelos $A_{\infty}$ y $H_{\infty}$ son equivalentes para modelar una serie temporal. Sin embargo, en la práctica, no se pueden utilizar infinitos parámetros.\\
+Si cortamos los parámetros en $n$, dichos modelos dejan de ser equivalentes y según utilicemos la expresión $A_n$ o $H_n$ obtenemos los modelos auto-regresivos (AR) o los de medias móviles (MA), respectivamente.
+
+\subsubsection{Modelos Auto-Regresivos (AR)}
+
+Su expresión general, con $n_a$ parámetros, como ya hemos visto, es:
+\[	A(q)y(t) = e(t) \ \ \text{con} \ \ A(q) \equiv 1 + \sum_{k=1}^{n_a} a_k q^{-k}	\]
+luego,
+\[ y(t) + \sum_{k=1}^{n_a} a_k y(t-k) = e(t) \Rightarrow y(t) = - \sum_{k=1}^{n_a} a_k y(t-k) + e(t)	\]
+con $e(t)$ una señal de ruido blanco.\\
+
+También podemos hacer:
+\[	y(t) = H(q) e(t) = \frac{1}{A(q)}e(t) = \sum_{k=0}^{\infty} h_k e(t-k)	\]
+y entonces dicho filtro será estable si cumple 
+\begin{equation} \label{eq:Festable}
+\sum_{k=0}^{\infty} |h_k| < \infty
+\end{equation}
+
+Otra condición para que sea estable es que las raíces de $A(q) = 0$ se queden dentro del círculo unidad.\\
+
+Además, tenemos que se cumple la propiedad de que si $e(t)$ es una señal de ruido blanco y el filtro lineal generador de la serie es estable, entonces la serie es estacionaria. Por tanto, si se cumple (\ref{eq:Festable}) la serie generada por un proceso auto-regresivo es siempre estacionaria.\\
+
+Multiplicando la expresión general
+\[	y(t) + a_1y(t-1) + a_2 y(t-2) + \cdots a_{n_a} y(t - n_a) = 0 \]
+por $y(t-k)$ con $k>0$, tomando esperanzas y teniendo en cuenta que las $a_i$ son constantes y la serie temporal $\{y(t)\}$ la hemos supuesto de media cero, nos queda:
+\[	\mathbb{E}[y(t)y(t-k)] + \mathbb{E}[a_1y(t-1)y(t-k)] + \cdots + \mathbb{E}[a_{n_a}y(t-n_a) y(t-k)] = 0 \Rightarrow	\]
+\[	\Rightarrow c_y(k) + a_1 c_y(k-1) + \cdots + a_{n_a} c_y(k-n_a) = 0	\]
+con $c_y(k)$ la autocovarianza de orden $k$, y si ahora dividimos por $c_y(0) = \sigma^2$ la varianza de $y$ tenemos que los coeficientes de autocorrelación verifican:
+\[	r_y(k) + a_1r_y(k-1) + \cdots + a_{n_a} r_y(k-n_a) = 0	\]
+
+Por otra parte, por la propia definición de autocorrelación parcial, si tomamos $k>n_a$ tenemos que $\phi_y(k) = 0$.\\
+
+Si descomponemos el polinomio $A(q)$ en función de sus raíces tendremos que, en general, $r_y(k)$ será una suma de funciones exponenciales y sinusoidales con amplitudes decrecientes exponencialmente. Tanto esto como tener en cuenta que la autocorrelación parcial se anula para todo $k>n_a$ nos hace más fácil reconocer una serie temporal que ha sido generada con un modelo auto-regresivo sin más que mirar las gráficas de las representaciones de las funciones de autocorrelación y de autocorrelación parcial.\\
+
+Este modelo que hemos visto es el auto-regresivo general de orden $n_a$, AR($n_a$). Podemos particularizar este modelo a un $n_a$ concreto. Por ejemplo, la expresión del modelo AR(2) sería
+\[	(1+a_1q^{-1}+a_2q^{-2})y(t) = e(t) \Rightarrow y(t) = -a_1y(t-1)-a_2y(t-2) + e(t)	\]
+
+\subsubsection{Modelos de medias móviles (MA)}
+
+En este caso, los nuevos valores de la serie temporal dependen de valores antiguos de $e(t)$, la señal de ruido blanco. La expresión general de un modelo MA de orden $n_c$ es
+\[ y(t) = C(q)e(t)\ \ \text{con}\ \ C(q) = 1 + \sum_{k=1}^{n_c} c_k q^{-k}	\]
+\[ \Rightarrow y(t) = e(t) + \sum_{k=1}^{n_c} c_k e(t-k)	\]
+
+Ahora, al haber un número finito de coeficientes, el filtro es estable automáticamente, de forma que la serie generada por este método será siempre una serie estacionaria.
+
 
 %\end{document}
