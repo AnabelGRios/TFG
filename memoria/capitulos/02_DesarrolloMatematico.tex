@@ -198,7 +198,7 @@ En particular, estas condiciones implican que la media y la varianza son constan
 
 
 Es interesante construir modelos para representar la evolución de una serie temporal y hacer predicciones sobre valores futuros de la misma. Estos modelos se basan en valores pasados y en la hipótesis de que las condiciones futuras serán análogas a las pasadas, de forma que si conocemos los valores pasados se pueden utilizar para hacer una predicción sobre valores futuros. La \textbf{ecuación general para el modelado de una serie temporal} es la siguiente:
-\[	y(t) = F(y(t-1), y(t-2), \dots, y(t-"\infty ")) + e(t)	\]
+\[	y(t) = F(y(t-1), y(t-2), \dots, y(t-k), \dots) + e(t)	\]
 donde $e(t)$ es un componente aleatorio que recoge el resto de efectos que actúan sobre la serie, sobre el que se supone que las variables son independientes entre sí y que siguen una distribución normal de media cero y varianza constante.\\
 Si existe otro conjunto de variables que puedan explicar el modelo (variables exógenas o explicativas) la ecuación general pasa a ser:
 \[	y(t) = F(y(t-1), y(t-2), \dots, x(t), x(t-1), \dots) + e(t)	\]
@@ -345,7 +345,98 @@ o si la serie tiene tendencia periódica
 
 \section{Análisis de Componentes Principales Dinámicos Generalizado}
 
+El análisis de componentes principales dinámicos generalizados es una aplicación del análisis de componentes principales a las series temporales, de forma que lo que se intenta es reducir la dimensión de varias series temporales observadas, de forma que haya que almacenar menos información, pero intentando perder el mínimo de información posible. Ha sido propuesto por Daniel Peña y Victor J. Yohai ~\cite{pena16}. La reducción de dimensión en series temporales es importante porque el número de parámetros en un modelo crece muy rápido a medida que aumenta el número de series que se observan.
 
+\subsubsection{Antecedentes: El método de componentes principales dinámicos de Brillinger}
+
+Antes del método propuesto por Peña y Yohai, se han propuesto otro métodos para reducir dimensión en series temporales y para predicción y reconstrucción de las mismas. Entre ellos cabe destacar el método de Brillinger, por ser uno de los que más está basado en el análisis de componentes principales básico, y por ser el que toma de base el procedimiento de Peña.\\
+
+En el procedimiento de Brillinger, las componentes principales son combinaciones lineales de las series que han sido observadas y sobre las que se quiere hacer la reducción. Las componentes principales son obtenidas a través de transformadas inversas de Fourier. Además, las series observadas han de ser estacionarias y tener tendencia estacional (o estar preprocesadas para que cumplan estas características). En caso de utilizar series no estacionarias, no está garantizado que la reconstrucción usando las componentes principales obtenidas vaya a ser óptima, es decir, que vaya a tener un error mínimo. Por otro lado, Brillinger dio resultados de consistencia para su procedimiento.\\
+
+A diferencia del método de Brillinger, en el de Peña las componentes principales no son necesariamente combinaciones lineales de las series observadas, se pueden utilizar varias funciones de pérdida y no es necesario que las series observadas sean estacionarias ni estacionales. Esto último lleva a una mejor adaptación a un mayor número de casos en los que las series observadas no tienen estas características, sin necesidad de preprocesarlas.\\
+
+Peña y Yohai dan un método iterativo para obtener las componentes principales dinámicas basándose en un criterio de error cuadrático medio (MSE por sus siglas en inglés, mean squared error) mínimo para la reconstrucción, aunque como se ha comentado, se podría utilizar otro criterio. La reconstrucción de las series se puede hacer en base a $k$ valores anteriores de las componentes principales obtenidas (a los que llamaremos \textbf{lags}) o, equivalentemente, en base a $k$ valores posteriores de las componentes (a los que llamaremos \textbf{leads}). Veamos que en efecto, es equivalente. Supongamos que observamos $m$ series de $T$ valores cada una, $z_{j,t}$ con $1 \leq j \leq m,\ 1 \leq t \leq T$. Si llamamos a $\mathbf{f} = (f_1, f_2, \dots, f_{T+k})$ la primera componente principal dinámica, la reconstrucción de las series originales con $k$ leads puede definirse como una combinación lineal de $\mathbf{f}$, una cierta matriz de coeficientes $\beta = (\beta_{j,i})_{1 \leq j \leq m, 1 \leq i \leq k+1}$ y un vector $\alpha = (\alpha_1, \alpha_2, \dots, \alpha_m)$:
+\begin{equation}\label{eq:reconsLeads}
+	\widehat{z}_{j,t} = \sum_{i=0}^k \beta_{j,i+1}f_{t+i} + \alpha_j.
+\end{equation}
+De forma que para reconstruir cada valor $t$ de una serie concreta $j$ estamos utilizando el valor $t$ y los $k$ valores siguientes, en total $k+1$ valores de $\mathbf{f}$.\\
+
+Ahora, si definimos $f_t^* = f_{t+k}$ con $1-k \leq t \leq T$ y $\beta_{j,i}^* = \beta_{j, k+2-i}$ con $1 \leq i \leq k+1$ podemos definir la reconstrucción de las series con $k$ lags como:
+\begin{equation}\label{eq:reconsLags}
+	\widehat{z}_{j,t} = \sum_{i=0}^k \beta_{j,i+1}^*f_{t-i}^* + \alpha_j.
+\end{equation}
+
+De forma que si partimos de la expresión (\ref{eq:reconsLags}) y utilizamos las definiciones de $\beta^*$ y $\mathbf{f}^*$, tenemos:
+\[	\widehat{z}_{j,t} = \sum_{i=0}^k \beta_{j,i+1}^*f_{t-i}^* + \alpha_j = \sum_{i=0}^k \beta_{j,k-i+1}f_{t-i+k} + \alpha_j	 = \]
+\[ = \beta_{j,k+1}f_{t+k} + \beta_{j,k}f_{t+k-i} + \cdots + \beta_{j,1}f_t + \alpha_j = \sum_{i=0}^k \beta_{j,i+1}f_{t+i} + \alpha_j	\]
+con lo que tenemos la expresión (\ref{eq:reconsLeads}), por lo que son equivalentes.\\
+
+De esta forma, el error cuadrático medio con $k$ leads se define:
+\begin{equation}\label{MSE}
+\text{MSE}(\mathbf{f}, \beta, \alpha) = \frac{1}{Tm} \sum_{j=1}^m \sum_{t=1}^T (z_{j,t} - \sum_{i=1}^k \beta_{j,i+1}f_{t+i} - \alpha_j)^2
+\end{equation}
+
+y los valores óptimos para $\mathbf{f},\ \beta$ y $\alpha$ serán donde el MSE alcance el mínimo.\\
+
+\subsection{Algoritmo iterativo para las componentes principales dinámicas}
+
+Vamos a dar ahora, siguiendo los pasos de Pena en \cite{pena16}, un algoritmo iterativo para encontrar los mejores valores de $\mathbf{f}$, $\beta$ y $\alpha$.\\
+
+
+Sea $\mathbf{C}_j(\alpha_j) = (c_{j,t,q}(\alpha_j))_{1 \leq t \leq T+k,\ 1 \leq q \leq k+1}$ la matriz $(T+k)\times (k+1)$ definida por 
+\begin{equation*}
+  c_{j,t,q}(\alpha_j) = 
+  \left\lbrace
+  \begin{array}{l}
+     (z_{j,t-q+1} - \alpha_j)\ \ \ \text{si} \ \ \ \text{máx}(1, t-T+1) \leq q \leq \text{mín}(k+1,t) \\
+     \ \ \ \ \ \ \ \ 0 \ \ \ \ \ \ \ \ \ \ \ \ \text{en otro caso}, \\
+  \end{array}
+  \right.
+\end{equation*}
+
+y sea $\mathbf{D}_j(\beta_j) = (d_{j,t,q,}(\beta_j))$ la matriz $(T+k) \times (T+k)$ dada por
+\begin{equation*}
+  d_{j,t,q}(\beta_j) = 
+  \left\lbrace
+  \begin{array}{l}
+     \sum_{v=\text{máx}(t-k,1)}^{\text{mín}(t,T)} \beta_{j,q-v+1} \beta_{j,t-v+1} \ \ \ \text{si} \ \ \ \text{máx}(1, t-k) \leq q \leq \text{min}(t+k,T+k) \\
+     \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0 \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \text{en otro caso}. \\
+  \end{array}
+  \right.
+\end{equation*}
+
+Podemos definir 
+\[	\mathbf{D}(\beta) = \sum_{j=1}^m \mathbf{D}_j(\beta_j).	\]
+
+Derivando la expresión (\ref{MSE}) con respecto a $f_t$ obtenemos que la primera componente principal dinámica es: %TODO: hacer si me da tiempo
+\begin{equation}\label{eq:deff}
+	\mathbf{f} = \mathbf{D}(\beta)^{-1} \sum_{j=1}^m \mathbf{C}_j(\alpha)\beta_j.
+\end{equation}
+
+Si llamamos $\mathbf{F}(\mathbf{f})$ a la matriz $T \times (k+2)$ cuya fila $t$-ésima es $(f_t, f_{t+1}, \dots,$ $ f_{t+k},1)$ y $\mathbf{z}^{(j)} = (z_{j,1}, \dots, z_{j,T})^T$ la serie temporal observada $j$-ésima, entonces los coeficientes $\beta_j$ y $\alpha_j$ con $1 \leq j \leq m$ se pueden obtener, teniendo en cuenta que estamos siguiendo el método de reconstrucción de mínimo error cuadrático medio, por el estimador de mínimos cuadrados, que es, por definición,
+\begin{equation}\label{eq:estimator}
+	\left( \begin{array}{c}
+	\beta_j \\
+	\alpha_j  \end{array} \right) = 
+	(\mathbf{F}(\mathbf{f})^T \mathbf{F}(\mathbf{f}))^T \mathbf{F}(\mathbf{f})^T \mathbf{z}^{(j)}   
+\end{equation}
+
+Basándonos en las expresiones (\ref{eq:deff}) y (\ref{eq:estimator}) se puede dar una regla para calcular de forma natural $\beta^{(h)}$, $\alpha^{(h)}$ y $\mathbf{f}^{(h+1)}$ una vez se conoce $\mathbf{f}^{(h)}$ y $\mathbf{f}^{(0)}$. En concreto, definimos $\beta_j^{(j)}$ y $\alpha_j^{(h)}$ con $1 \leq j \leq m$ como
+\[	\left( \begin{array}{c}
+	\beta_j^{(h)} \\
+	\alpha_j^{(h)}  \end{array} \right) = 
+	(\mathbf{F}(\mathbf{f}^{(h)})^T \mathbf{F}(\mathbf{f}^{(h)}))^T \mathbf{F}(\mathbf{f}^{(h)})^T \mathbf{z}^{(j)},
+\]
+
+y definimos $\mathbf{f}^{(h+1)}$ por
+\[	\mathbf{f}^{(h+1)} = \sqrt{T+k} \frac{\mathbf{f}^* - \overline{\mathbf{f}}^*}{||\mathbf{f}^* - \overline{\mathbf{f}}^*||},	\]
+donde
+\[	\mathbf{f}^* = \mathbf{D}(\beta^{(h)})^{-1} \mathbf{C}(\alpha^{(h)})\beta^{(h)}.	\]
+
+$\mathbf{f}^{(0)}$ se elige como la primera componente principal (no dinámica), completada con $k$ ceros.\\
+
+Las iteraciones del algoritmo se paran cuando, dado un $\varepsilon$ prefijado,
+\[	\frac{\text{MSE}(\mathbf{f}^{(h)},\beta^{(h)},\alpha^{(h)}) - \text{MSE}(\mathbf{f}^{(h+1)},\beta^{(h+1)},\alpha^{(h+1)})}{\text{MSE}(\mathbf{f}^{(h)},\beta^{(h)},\alpha^{(h)})} < \varepsilon.	\]
 
 
 

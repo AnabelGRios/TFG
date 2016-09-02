@@ -25,11 +25,11 @@
 
 \usepackage{longtable}
 
-\usepackage[colorlinks=true,linkcolor=black]{hyperref} %referencia
+\usepackage[colorlinks=true,linkcolor=black,citecolor=blue]{hyperref} %referencia
 
 \usepackage{float}
 \usepackage{amsmath}
-\usepackage{MnSymbol}
+
 
 % ********************************************************************
 % Re-usable information
@@ -70,6 +70,7 @@ pdfproducer = {pdflatex}
 \usepackage[stable]{footmisc}
 \usepackage{amsthm}
 %\usepackage{index}
+\usepackage{amssymb}
 
 %\makeindex
 %\usepackage[style=long, cols=2,border=plain,toc=true,number=none]{glossary}
@@ -111,11 +112,12 @@ pdfproducer = {pdflatex}
   {\bfseries}% name of head font
   {.}% punctuation between head and body
   { }% space after theorem head; " " = normal interword space
-  {\thmname{#1}\thmnumber{ #2.}\thmnote{ #3}}
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ #3}}
   
   
 \theoremstyle{definition_wo_parentheses}	
 \newtheorem{definicion}{Definición}[chapter]
+\newtheorem{nota}{Nota}[chapter]
 
 \definecolor{gray97}{gray}{.97}
 \definecolor{gray75}{gray}{.75}
@@ -244,7 +246,7 @@ pdfproducer = {pdflatex}
 \input{capitulos/04_Conclusiones}
 %
 %%\nocite{*}
-\input{capitulos/Bibliografia}
+%\input{capitulos/Bibliografia}
 %
 %\appendix
 %\input{apendices/manual_usuario/manual_usuario}
@@ -254,5 +256,9 @@ pdfproducer = {pdflatex}
 % \printglossary
 \chapter*{}
 \thispagestyle{empty}
+
+\bibliography{capitulos/bibliografia}
+\label{bibliography}
+\bibliographystyle{plain}
 
 \end{document}
