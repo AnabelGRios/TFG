@@ -16,26 +16,26 @@
 
 \begin{definicion}[Varianza]
 	Dada una variable aleatoria $\mathbf{X}$, la varianza de dicha variable se define como la desviación cuadrática media respecto de la esperanza de la misma variable:
-	\[	\var{(\mathbf{X})} = \mathbb{E}[(\mathbf{X} - \mathbb{E}[\mathbf{X}])^2]	\]
+	\[	\var{(\mathbf{X})} = \mathbb{E}[(\mathbf{X} - \mathbb{E}[\mathbf{X}])^2],	\]
 	donde $\mathbb{E}[\mathbf{X}]$ denota la esperanza de la variable $\mathbf{X}$ con respecto a una distribución de probabilidad $\mathbb{P}(x)$.
 \end{definicion}
 
 La varianza es un indicador de la representatividad de la esperanza: a mayor varianza menor representatividad.\\
 
 En concreto, si la variable $\mathbf{X}$ es discreta y conocemos un conjunto de $N$ datos de la misma, $\{x(t); t=1,\dots,N\}$, podemos calcular la varianza de los datos como 
-\[	\var{(x)} = \frac{1}{N} \sum_{t=1}^N(x(t)-\bar{x})^2	\]
+\[	\var{(x)} = \frac{1}{N} \sum_{t=1}^N(x(t)-\bar{x})^2,	\]
 con $\bar{x}$ denotando la esperanza o media aritmética de los datos.
 
 \begin{definicion}[Covarianza]
 	Dadas dos variables aleatorias $\mathbf{X}$ e $\mathbf{Y}$, se define la covarianza entre ellas como
-	\[	\cov{(\mathbf{X}, \mathbf{Y})} = \mathbb{E}[(\mathbf{X}-\mathbb{E}[\mathbf{X}])(\mathbf{Y}-\mathbb{E}[\mathbf{Y}])]	\]
+	\[	\cov{(\mathbf{X}, \mathbf{Y})} = \mathbb{E}[(\mathbf{X}-\mathbb{E}[\mathbf{X}])(\mathbf{Y}-\mathbb{E}[\mathbf{Y}])].	\]
 \end{definicion}
 
 Una de las ventajas de la covarianza es que nos da una idea de cómo de relacionadas linealmente están las variables. De esta forma, si la covarianza es nula, las variables no están relacionadas linealmente, y si el valor de la misma es grande (ya sea positivo o negativo) entonces las variables cambian mucho y están lejos de sus medias al mismo tiempo, es decir, cuando una de ellas está lejos de su media la otra también lo está de la suya.
 
 \begin{definicion}[Matriz de covarianzas]
 	Sea $\mathbf{X}$ un vector de variables aleatorias $\mathbf{X}=(\mathbf{X}_1, \cdots, \mathbf{X}_n)^T$ de forma que cada $\mathbf{X}_i,\ i=1, \dots, n$ tiene varianza finita. Se define la matriz de covarianzas de $\mathbf{X}$ como la matriz que contiene la covarianza entre los elementos del vector, es decir, cada posición $(i,j)$ se define como 
-	\[ \cov{(\mathbf{X}_i, \mathbf{X}_j)} = \mathbb{E}[(\mathbf{X}_i - \mathbb{E}[\mathbf{X}_i])(\mathbf{X}_j - \mathbb{E}[\mathbf{X}_j])]	\]
+	\[ \cov{(\mathbf{X}_i, \mathbf{X}_j)} = \mathbb{E}[(\mathbf{X}_i - \mathbb{E}[\mathbf{X}_i])(\mathbf{X}_j - \mathbb{E}[\mathbf{X}_j])].	\]
 	Notaremos a esta matriz $\Sigma$.
 \end{definicion}
 
@@ -45,30 +45,26 @@ Es necesario que las varianzas de cada variable aleatoria sean finitas para que 
 
 \begin{definicion}[Autocovarianza de orden k]
 Si tenemos una variable aleatoria $\mathbf{Y}$ discreta y conocemos un conjunto de $N$ datos de la misma, $\{y(t); t=1,\dots,N\}$, podemos definir la autocovarianza de orden k como:
-\[	c_y(k) = \cov{(y_t, y_{t+k})} = \frac{1}{N} \sum_{t=1}^{N-k}(y(t)-\bar{y})(y(t+k)-\bar{y})	\]
+\[	c_y(k) = \cov{(y_t, y_{t+k})} = \frac{1}{N} \sum_{t=1}^{N-k}(y(t)-\bar{y})(y(t+k)-\bar{y}).	\]
 \end{definicion}
 
 \begin{definicion}[Autocorrelación de orden k]
 Si tenemos una variable aleatoria $\mathbf{Y}$ discreta de la que conocemos sus autocovarianzas de orden 0 (varianza) y orden k, podemos definir la autocorrelación de orden k como el coeficiente:
-\[	r_y(k) = \frac{c_y(k)}{c_y(0)}	\]
+\[	r_y(k) = \frac{c_y(k)}{c_y(0)}.	\]
 
 Al conjunto de todas las autocorrelaciones lo llamamos \textbf{función de autocorrelación (ACF)}.
 \end{definicion}
 
 \begin{definicion}[Autocorrelación parcial de orden k]
 Si tenemos una variable aleatoria $\mathbf{Y}$ discreta y conocemos un conjunto de $N$ datos de la misma, $\{y(t); t=1,\dots,N\}$ podemos definir la autocorrelación parcial de orden k como un coeficiente $\phi_y(k)$ de forma que:
-\[	y(t) = a_0 + a_1y(t-1)+\cdots + a_{k-1}y(t-k+1) + \phi_y(k)y(t-k)	\]
+\[	y(t) = a_0 + a_1y(t-1)+\cdots + a_{k-1}y(t-k+1) + \phi_y(k)y(t-k).	\]
 
 $\phi_y(k)$ mide el grado de asociación lineal (correlación) entre $y(t)$ e $y(t-k)$ cuando se cancela el efecto de las variables intermedias. Al conjunto de las autocorrelaciones parciales se le llama \textbf{función de autocorrelación parcial (PACF)}.
 \end{definicion}
 
-%\begin{definicion}[Distribución normal]
-%\end{definicion}
-
-%\begin{definicion}[Distribución normal multivariante]
-%\end{definicion}
-
 \section{Multiplicadores de Lagrange}
+
+Como podemos encontrar en los apuntes del profesor Javier Pérez en la referencia \cite{jperez}, el teorema de Lagrange es el siguiente:
 
 \begin{definicion}[Función de Lagrange]
 Supongamos $M$ una variedad de dimensión $k=m-n$ determinada por una función vectorial $g: \Omega \rightarrow \mathbb{R}^m$ de clase $\mathcal{C}^q$ en un abierto $\Omega \subset \mathbb{R}^n$ y tal que el rango $Dg(\mathbf{x}) = m < n$ para todo $\mathbf{x} \in \Omega$, donde $D$ representa la matriz jacobiana de g, y supongamos $f: \Omega \rightarrow \mathbb{R}$ un campo escalar de clase $\mathcal{C}^q$ en $\Omega$. Entonces podemos definir la función de Lagrange $\mathcal{L}: \Omega \times \mathbb{R}^m \rightarrow \mathbb{R}$ como:
@@ -103,7 +99,7 @@ Sea $x$ un vector de $\mathbb{R}^n$ y $A$ una matriz cuadrada de orden $n$ simé
 
 \begin{proposicion}[Derivación de una forma cuadrática]
 Dada la forma cuadrática $x^TAx$, se verifica que es diferenciable y para cada $x \in \mathbb{R}^n$:
-\[	\frac{\partial x^TAx}{\partial x} = 2Ax	\]
+\[	\frac{\partial x^TAx}{\partial x} = 2Ax,	\]
 donde $\frac{\partial}{\partial x}$ denota el gradiente con respecto al vector $x$.
 \end{proposicion}
 \textbf{Demostración}\\
@@ -120,7 +116,7 @@ x_2 \\
 \cdots \\
 x_n \end{array} \right) =
 \]
-\[ = \sum_{i=1}^n \sum_{j=1}^n a_{ij}x_ix_j	\]
+\[ = \sum_{i=1}^n \sum_{j=1}^n a_{ij}x_ix_j.	\]
 
 Tenemos que derivar ahora esta suma con respecto a cada componente de $x$. Sea $1 \leq k \leq n$ la componente respecto a la que estamos derivando, entonces 
 \[	\frac{\partial x^TAx}{\partial x_k} = \sum_{i=1}^n \sum_{j=1}^n a_{ij} \frac{\partial}{\partial x_k} (x_ix_j)	\]
@@ -133,16 +129,16 @@ y cada $\frac{\partial}{\partial x_k} x_ix_j$ puede ser:
 \end{enumerate}
 
 Por tanto, tenemos:
-\[	\frac{\partial x^TAx}{\partial x_k} = (a_{1k} + a_{k1})x_1 + (a_{2k} + a_{k2})x_2 + \cdots + (a_{kn}+a_{nk})x_n	\]
+\[	\frac{\partial x^TAx}{\partial x_k} = (a_{1k} + a_{k1})x_1 + (a_{2k} + a_{k2})x_2 + \cdots + (a_{kn}+a_{nk})x_n,	\]
 y como $A$ es simétrica, se da que $a_{ij} = a_{ji}$ para todos $i$ y $j$ entre $1$ y $n$, luego:
-\[	\frac{\partial x^TAx}{\partial x_k} = \sum_{i=1}^n 2a_{ik}x_i	\]
+\[	\frac{\partial x^TAx}{\partial x_k} = \sum_{i=1}^n 2a_{ik}x_i,	\]
 y por tanto
 \[	\frac{\partial x^TAx}{\partial x} = 2
 \left( \begin{array}{c}
 \sum_{i=1}^n a_{i1}x_i \\
 \sum_{i=1}^n a_{i2}x_i \\
 \cdots \\
-\sum_{i=1}^n a_{in}x_i \end{array} \right) = 2Ax	\]
+\sum_{i=1}^n a_{in}x_i \end{array} \right) = 2Ax.	\]
 \begin{flushright}
 $\blacksquare$
 \end{flushright}
@@ -165,7 +161,7 @@ Podemos definir el operador retardo:
 y con esta notación podemos escribir la salida del filtro como
 \[	y(t) = H(q)e(t) = \sum_{k=0}^{\infty} h_k q^{-k} e(t) = h_0q^{-0}+h_1q^{-1}e(t)+ \cdots = \]
 \[ = h_0e(t) + h_1e(t-1) + \cdots	\]
-De esta forma $H(q)$ se llama la función de transferencia del filtro digital $H(q) = \sum_{k=0}^{\infty} h_k q^{-k}$.
+De esta forma $H(q)$ se llama la \textbf{función de transferencia} del filtro digital $H(q) = \sum_{k=0}^{\infty} h_k q^{-k}$.
 \end{nota}
 
 %MAAAAAAAAAAAAL
