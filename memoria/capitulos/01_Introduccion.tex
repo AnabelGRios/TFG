@@ -19,14 +19,40 @@ Ahora, una de las formas en las que se almacena mucha información es cuando se 
 
 
 \section{Descripción del problema abordado}
+El problema abordado en este trabajo ha sido de iniciación a la investigación, en concreto, partir de un paper de relativa novedad (el de Peña y Yohai en \cite{pena16}, que aún no está publicado), entenderlo y buscar y documentarme primero en los cimientos en los que está basado (análisis de componentes principales y series temporales) para poder más tarde trabajar sobre él. Se ha hecho un estudio sobre los tiempos de cómputo del algoritmo dado en \cite{pena16} gracias a la versión del paquete de \texttt{R} en desarrollo facilitada por Daniel Peña y más tarde a la última versión llevada a cabo por Ezequiel Smucler cuya dirección se encuentra en \cite{ezeq}, debido a varios fallos en la versión previa. Se han llevado a cabo también varias posibles aplicaciones de este algoritmo, como compresión de imágenes en escala de grises y en color y buscar patrones en series temporales periódicas.\\ %TODO: en serio?
 
+Se exponen aquí tanto el desarrollo teórico seguido para la comprensión del artículo como los resultados obtenidos de las pruebas y aplicaciones realizadas. Cabe señalar que todo el estudio práctico se ha hecho a través del software libre para análisis estadístico \texttt{R}.
 
 
 \section{Técnicas y herramientas utilizadas}
+Por un lado, los principales conceptos y técnicas matemáticas usadas en este proyecto han sido:
+\begin{itemize}
+\item Estadística: esperanza, varianza, covarianza y correlación.
+\item Álgebra: matrices y simetría.
+\item Geometría: formas cuadráticas, vectores propios, valores propios.
+\item Análisis: técnica de los multiplicadores de Lagrange.
+\end{itemize}
+\textit{ }\\
+Por otro lado, las principales áreas y técnicas informáticas utilizadas han sido:
+\begin{itemize}
+\item Algoritmia: comprensión de algoritmos utilizados por las herramientas usadas.
+\item Programación funcional.
+\item Automatización de pruebas ejecutables en cualquier máquina con el software de \texttt{R} necesario.
+%TODO: \item Aprendizaje automático:
+\end{itemize}
 
 
-\section{Contenido de la memoria y principales fuentes consultadas}
+\section{Contenido de la memoria}
+En el capítulo~\ref{ch:introMates} se recogen los conceptos, técnicas y resultados matemáticos que van a ser necesarios para el resto de capítulos, tales como el concepto de varianza, el concepto de autocovarianza de orden $k$, el teorema de Lagrange para la técnica de los multiplicadores de Lagrange o el resultado sobre derivación de una forma cuadrática, entre otros.\\
 
+En el capítulo~\ref{ch:matematicas} se expone la parte matemática del trabajo. En este capítulo se hace un estudio formal sobre el análisis de componentes principales, explicando cómo se obtienen las primeras componentes y por qué y dando después un método iterativo para obtener las demás. Además, se da una introducción a series temporales y se hace un resumen del método dado en \cite{pena16} para obtener las componentes principales dinámicas, recalcando las diferencias con el análisis de componentes principales original.\\ %TODO: en caso de que lo hagas.
+
+En el capítulo~\ref{ch:informatica} %TODO: terminar esto y el capítulo de conclusiones.
+
+
+\section{Principales fuentes consultadas}
+Las principales fuentes consultadas son el artículo de Peña y Yohai en \cite{pena16}, el libro de estadística multivariante \cite{anderson} para análisis de componentes principales y \cite{pena05} para series temporales. El resto de fuentes se detallan en la bibliografía en la página \pageref{bibliography}.
+%TODO: apuntes Ramón
 
 
 %\end{document}
