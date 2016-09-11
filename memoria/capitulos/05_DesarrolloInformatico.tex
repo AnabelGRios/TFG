@@ -11,9 +11,57 @@
 Para la realización de todos los experimentos en este capítulo (con excepción de los test estadísticos ANOVA y rangos múltiples, hechos en una versión de prueba de Statgraphics) se ha utilizado el software \texttt{R} junto con los paquetes \texttt{bmp} para leer imágenes en formato \textit{.bmp} y \texttt{gdpc} cuya versión en desarrollo puede encontrarse en el enlace en \cite{ezeq}. El resto de funciones utilizadas están en paquetes que se instalan en una instalación por defecto en \texttt{R}.
 
 \section{Breve descripción del paquete utilizado}
-y de las funciones que has hecho tú.
+
+El paquete utilizado ha sido la versión 0.99.3 de la referencia \cite{ezeq}. Este paquete provee dos métodos importantes y un conjunto de datos con 6 series con el IPI (Industrial Production Index) de 6 países distintos. Las dos funciones a destacar son \texttt{gdpc()} y \texttt{auto.gdpc()}. La primera función devuelve una única componente principal dinámica dado un número $k$ de lags fijo. Por defecto calcula la primera, pero se le puede pasar la componente principal dinámica anterior a la que se quiere calcular. Se puede elegir calcular la componente entre 4 criterios. se ha elegido mantener siempre el que tiene por defecto, \texttt{'LOO'}, por ser el que minimiza el error cuadrático medio, utilizando un leave-one-out cross validation. La segunda función, \texttt{auto.gdpc()} calcula las $l$ primeras componentes hasta que con ellas se consigue explicar un porcentaje de varianza determinado, pasado también en el argumento de la función \texttt{expl\_var}. Además, permite dar un \texttt{k\_max} de lags, de forma que prueba entre 0 y \texttt{k\_max} y se queda con el $k$ que minimiza el error según el criterio elegido. Alternativamente, también se puede elegir calcular exactamente las $L$ primeras componentes. En ambos casos se puede utilizar el parámetro \texttt{ncores}, que permite dar un número de cores a utilizar en las partes paralelizadas del algoritmo.\\
+
+Así mismo, se han programado funciones para reconstruir las series originales dado un objeto de tipo \texttt{gdpc}, conteniendo la componente principal dinámica, la matriz de coeficientes $\beta$ y el vector de coeficientes $\alpha$, y para reconstruir las series originales dada una lista de objetos del tipo \texttt{gdpc}, sumando la información que da cada componente principal. Se han programado también funciones para leer y escribir ficheros pdf (las imágenes se han guardado en este formato para que no hubiera compresión de las mismas tipo \texttt{jpg}. Se ha programado también una función para pasar todos los elementos de una matriz al intervalo $[0,1]$, útil en la reconstrucción de imágenes a color, como se verá más adelante.\\
+
+Por otra parte, se han programado una serie de funciones para automatizar las pruebas que se han hecho con el algoritmo para obtener tiempos en función de los parámetros que se le pasan al mismo.\\
+
+Todo este código se puede consultar en la dirección en la referencia %TODO
+
 
 \section{Estudio de tiempos en función de los parámetros}
+
+Se han hecho dos tipos de pruebas, una para evaluar principalmente si influye el tipo de serie en el tiempo que tarda el algoritmo y otra para evaluar si influyen los parámetros \texttt{k\_max}, \texttt{expl\_var}, \texttt{T}, \texttt{m} y \texttt{ncores}.\\
+
+En la primera se han utilizado tres tipos de series: series generadas con un método de Monte Carlo, series generadas aleatoriamente y series sacadas de las columnas de una imagen. Se varían además los parámetros \texttt{expl\_var} entre 0.6, 0.8 y 0.95, \texttt{T} entre 32, 256 y 512 y \texttt{m} entre 32 y 256. Los resultados se pueden ver en la tabla %TODO en el apéndice
+Se ha realizado con Statgraphics un estos resultados un análisis ANOVA y un análisis de rango múltiples, con nivel de significación 0.05, obteniendo lo que aparece en la figura \ref{f:anova1}.\\
+
+\begin{figure}
+ \centering
+  \subfloat[ANOVA]{
+   \label{f:tigreO}
+    \includegraphics[width=\textwidth]{../imagenes/ANOVAtipo.png}}
+    \newline
+    \centering
+  \subfloat[Rangos múltiples]{
+   \label{f:tigreR}
+    \includegraphics[width=0.9\textwidth]{../imagenes/RANGOSMtipo.png}}
+ \caption{Tests sobre Tiempo}
+ \label{f:anova1}
+\end{figure}
+
+Como podemos ver, efectivamente el tipo de serie influye en el tiempo que tarda en encontrar el algoritmo las componentes principales dinámicas. También nos dice que los parámetros \texttt{m} y \texttt{T} influyen, pero que no se puede decir que el parámetro \texttt{expl\_var} influya. Esto es porque en esta prueba no se llega a probar con series de gran tamaño porque el tiempo de las series aleatorias crecía demasiado, si hay pocas series con pocos valores, la varianza se explicará casi toda normalmente con pocas componentes principales, por lo que no se puede decir si influye o no.\\
+
+En la segunda prueba hay muchos más casos de prueba. Se varían los parámetros \texttt{expl\_var} (entre 0.6, 0.8 y 0.95), \texttt{ncores} (entre 1, 2 y 4), \texttt{k\_max} (entre 3, 7 y 10), \texttt{T} (entre 32, 256 y 512) y \texttt{m} (entre 32, 256 y 512), mientras que el tipo de serie se ha mantenido constante a las generadas por el método de Monte Carlo. Los resultados pueden verse en %TODO enlace a git porque vaya
+y se han realizado de nuevo un análisis ANOVA y un análisis de rangos múltiples, con nivel de significación 0.05. El resultado está en la figura \ref{f:anova2}.\\
+
+\begin{figure}
+ \centering
+  \subfloat[ANOVA]{
+   \label{f:tigreO}
+    \includegraphics[width=\textwidth]{../imagenes/ANOVAmc.png}}
+    \newline
+    \centering
+  \subfloat[Rangos múltiples sobre expl\_var]{
+   \label{f:tigreR}
+    \includegraphics[width=0.9\textwidth]{../imagenes/RANGOSMmc.png}}
+ \caption{Tests sobre Tiempo}
+ \label{f:anova2}
+\end{figure}
+
+En este caso como vemos sí podemos afirmar que \texttt{expl\_var} influya en el tiempo, así como \texttt{T} y \texttt{m} de nuevo. Sin embargo no se puede decir nada de \texttt{ncores}. Esto es así porque, si nos fijamos en la tabla de tiempos, cuando hay pocas series con pocos valores, cuesta más paralelizar que lo que se gana paralelizando en tiempo, por lo que tarda más al principio tener más cores que tener uno. Sin embargo, según van aumentando el número de series como de valores, el tiempo transcurrido con más cores es inferior al tiempo transcurrido con un solo core, por lo que en realidad este parámetro sí influye en el tiempo.
 
 
 \section{Aplicación: Compresión de imágenes}
