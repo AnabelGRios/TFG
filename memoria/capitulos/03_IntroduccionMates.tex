@@ -1,6 +1,8 @@
 \chapter{Introducción al desarrollo matemático}
 \label{ch:introMates}
 
+Se exponen en este capítulo los conocimientos básicos necesarios para el desarrollo matemático en el capítulo \ref{ch:matematicas}.
+
 \section{Algunos conceptos sobre estadística}
 
 \begin{definicion}[Varianza]
@@ -55,7 +57,7 @@ $\phi_y(k)$ mide el grado de asociación lineal (correlación) entre $y(t)$ e $y
 
 \section{Multiplicadores de Lagrange}
 
-Como podemos encontrar en los apuntes del profesor Javier Pérez en la referencia \cite{jperez}, el teorema de Lagrange es el siguiente:
+Como podemos encontrar en los apuntes del profesor de la UGR Javier Pérez en la referencia \cite{jperez}, el teorema de Lagrange es el siguiente:
 
 \begin{definicion}[Función de Lagrange]
 Supongamos $M$ una variedad de dimensión $k=m-n$ determinada por una función vectorial $g: \Omega \rightarrow \mathbb{R}^m$ de clase $\mathcal{C}^q$ en un abierto $\Omega \subset \mathbb{R}^n$ y tal que el rango $Dg(\mathbf{x}) = m < n$ para todo $\mathbf{x} \in \Omega$, donde $D$ representa la matriz jacobiana de g, y supongamos $f: \Omega \rightarrow \mathbb{R}$ un campo escalar de clase $\mathcal{C}^q$ en $\Omega$. Entonces podemos definir la función de Lagrange $\mathcal{L}: \Omega \times \mathbb{R}^m \rightarrow \mathbb{R}$ como:
@@ -137,7 +139,7 @@ $\blacksquare$
 \end{flushright}
 
 \section{Filtros digitales lineales}
-%TODO: citar
+La siguiente introducción de filtros digitales utiliza la referencia \cite{lennart}.\\
 
 Son un sistema que transforma una señal de entrada $\{e(t);\ t=1,2,\dots\}$ en una señal de salida $\{y(t);\ t=1,2,\dots \}$ que será una función lineal de la señal de entrada, concretamente una convolución discreta de $e(t)$ y otra cierta función $h(t)$:
 \[	y(t) = \sum_{k=0}^{\infty} h_k e(t-k) = h(t) \ast e(t) = h_0 e(t) + h_1 e(t-1) + \cdots	\]

@@ -25,7 +25,7 @@ Todo este código se puede consultar en la dirección en la referencia %TODO
 
 Se han hecho dos tipos de pruebas, una para evaluar principalmente si influye el tipo de serie en el tiempo que tarda el algoritmo y otra para evaluar si influyen los parámetros \texttt{k\_max}, \texttt{expl\_var}, \texttt{T}, \texttt{m} y \texttt{ncores}.\\
 
-En la primera se han utilizado tres tipos de series: series generadas con un método de Monte Carlo, series generadas aleatoriamente y series sacadas de las columnas de una imagen. Se varían además los parámetros \texttt{expl\_var} entre 0.6, 0.8 y 0.95, \texttt{T} entre 32, 256 y 512 y \texttt{m} entre 32 y 256. Los resultados se pueden ver en la tabla %TODO en el apéndice
+En la primera se han utilizado tres tipos de series: series generadas con un método de Monte Carlo, series generadas aleatoriamente y series sacadas de las columnas de una imagen. Se varían además los parámetros \texttt{expl\_var} entre 0.6, 0.8 y 0.95, \texttt{T} entre 32, 256 y 512 y \texttt{m} entre 32 y 256. Los resultados se pueden ver en \cite{anabel}.
 Se ha realizado con Statgraphics un estos resultados un análisis ANOVA y un análisis de rango múltiples, con nivel de significación 0.05, obteniendo lo que aparece en la figura \ref{f:anova1}.\\
 
 \begin{figure}
@@ -44,7 +44,7 @@ Se ha realizado con Statgraphics un estos resultados un análisis ANOVA y un an�
 
 Como podemos ver, efectivamente el tipo de serie influye en el tiempo que tarda en encontrar el algoritmo las componentes principales dinámicas. También nos dice que los parámetros \texttt{m} y \texttt{T} influyen, pero que no se puede decir que el parámetro \texttt{expl\_var} influya. Esto es porque en esta prueba no se llega a probar con series de gran tamaño porque el tiempo de las series aleatorias crecía demasiado, si hay pocas series con pocos valores, la varianza se explicará casi toda normalmente con pocas componentes principales, por lo que no se puede decir si influye o no.\\
 
-En la segunda prueba hay muchos más casos de prueba. Se varían los parámetros \texttt{expl\_var} (entre 0.6, 0.8 y 0.95), \texttt{ncores} (entre 1, 2 y 4), \texttt{k\_max} (entre 3, 7 y 10), \texttt{T} (entre 32, 256 y 512) y \texttt{m} (entre 32, 256 y 512), mientras que el tipo de serie se ha mantenido constante a las generadas por el método de Monte Carlo. Los resultados pueden verse en %TODO enlace a git porque vaya
+En la segunda prueba hay muchos más casos de prueba. Se varían los parámetros \texttt{expl\_var} (entre 0.6, 0.8 y 0.95), \texttt{ncores} (entre 1, 2 y 4), \texttt{k\_max} (entre 3, 7 y 10), \texttt{T} (entre 32, 256 y 512) y \texttt{m} (entre 32, 256 y 512), mientras que el tipo de serie se ha mantenido constante a las generadas por el método de Monte Carlo. Los resultados pueden verse en \cite{anabel}.
 y se han realizado de nuevo un análisis ANOVA y un análisis de rangos múltiples, con nivel de significación 0.05. El resultado está en la figura \ref{f:anova2}.\\
 
 \begin{figure}
@@ -91,7 +91,7 @@ Se han elegido las tres imágenes anteriores por las siguientes razones:
 \item Hay dos imágenes más grandes (Lena es de 512x512 y la del pato de 500x546) y una más pequeña, la del tigre, que tiene 320x240.
 \end{enumerate}
 
-Intuitivamente, en el primer punto deberíamos obtener que la imagen reconstruida en escala de grises tiene más calidad que las imágenes en color, puesto que al reconstruir tres capas en lugar de una hay más posibilidad de perder información general a la hora de ver la imagen. Del mismo modo, en el segundo punto se debería obtener que la imagen más sencilla tiene más calidad que las otras dos, ya que debe ser más fácil reconstruir una serie prácticamente constante.\\ %En cuanto al tercer punto, parecería lógico pensar que cuanto más pequeña sea la imagen más fácil será de reconstruir, ya que \\
+Intuitivamente, en el primer punto deberíamos obtener que la imagen reconstruida en escala de grises tiene más calidad que las imágenes en color, puesto que al reconstruir tres capas en lugar de una hay más posibilidad de perder información general a la hora de ver la imagen. Del mismo modo, en el segundo punto se debería obtener que la imagen más sencilla tiene más calidad que las otras dos, ya que debe ser más fácil reconstruir una serie prácticamente constante.\\ 
 
 En un primer experimento, se han sacado las componentes principales con \texttt{k\_max = 5} y \texttt{expl\_var = 0.95} en los tres casos y se han reconstruido las imágenes con las componentes y los coeficientes obtenidos. En el caso de las imágenes a color se han separado los canales de color, sacado las componentes principales para cada canal, se ha reconstruido cada canal con sus componentes y se han vuelto a juntar para guardar la imagen. En el caso de la imagen de Lena, se han obtenido 12 componentes principales dinámicas. Para el pato se han obtenido 6, 5 y 6 para las capas R, G y B, respectivamente, y para el tigre 10, 13 y 11. Los resultados obtenidos han sido los mostrados en las figuras \ref{f:imgsLena}, \ref{f:imgsPato} y \ref{f:imgsTigre}.\\
 
@@ -322,24 +322,38 @@ Como último experimento dentro de la compresión de imágenes se ha elegido ver
  \label{f:RLenaC4}
 \end{figure}
 
-Como se puede observar, la mejora de la reconstrucción conforme se van agregando componentes hasta la octava es obvia, ya que se pasa de ver una simple silueta a ver la imagen original. Agregar la información que aportan el resto de componentes le da a la reconstrucción la nitidez que veíamos al principio. Esto es así porque la información que va aportando cada componente se suma a la que información de la que ya se disponía, como se ha comentado antes.\\ %TODO
+Como se puede observar, la mejora de la reconstrucción conforme se van agregando componentes hasta la octava es obvia, ya que se pasa de ver una simple silueta a ver la imagen original. Agregar la información que aportan el resto de componentes le da a la reconstrucción la nitidez que veíamos al principio. Esto es así porque la información que va aportando cada componente se suma a la que información de la que ya se disponía, como se ha comentado antes.\\
 
-%TODO conclusiones en la utilización a compresión de imágenes en general
+\subsection{Comparación con el análisis de componentes principales}
+Se ha hecho una pequeña comparación con el análisis de componentes principales, suponiendo que lo utilizamos también para compresión de imágenes. Se ha utilizado la función \texttt{prcomp} de \texttt{R} y los resultados en cuanto a calidad se pueden ver en la figura \ref{f:LenaPCA}. Sin embargo aunque en reconstrucción claramente gana el algoritmo GDPC también es cierto que PCA tarda mucho menos en comprimir.\\
+
+\begin{figure}[H]
+ \centering
+  \subfloat[Algoritmo GDPC]{
+   \label{f:lena095p}
+    \includegraphics[width=0.33\textwidth]{../imagenes/lena095.pdf}}
+  \subfloat[Algoritmo PCA]{
+   \label{f:lenaPCA}
+    \includegraphics[width=0.33\textwidth]{../imagenes/lenaPCA.pdf}}
+ \caption{Reconstrucciones de Lena con distintos algoritmos}
+ \label{f:LenaPCA}
+\end{figure}
+
+\newpage
 
 \section{Aplicación: Búsqueda de patrones en series periódicas}
 
-Una de las técnicas en el preprocesamiento de series es eliminar los periodos de las series originales, ya que es uno de los pasos para hacerlas estacionarias, en caso de que éstas sean periódicas. Se ha pensado en utilizar el algoritmo GDPC para obtener el patrón periódico de la serie y restárselo directamente a la serie original por periodos. Para ello, se toma la serie original y se divide en periodos y se coloca cada trozo de la serie original como una columna de una matriz, sobre la que se pasará el GDPC. Al ser las series parecidas, lo más probable es que sólo se obtenga una componente principal dinámica, de modo que ésta será la que utilicemos. En caso de que se obtenga más de una, siempre se puede aumentar \texttt{k\_max} o disminuir un poco \texttt{expl\_var} en el algoritmo para obtener una sola componente principal dinámica.\\
+Una de las técnicas en el preprocesamiento de series es descomponer una serie en sus distintas componenetes, como tendencia, periodicidad, etc. Una de las cosas que hay que hacer, por tanto, es obtener el patrón periódico de la serie. Se ha pensado en utilizar el algoritmo GDPC para obtener dicho patrón porque es fácil de conseguir con un mínimo preprocesamiento de la serie. Este preprocesamiento es el siguiente: se toma la serie original, se divide en periodos y se coloca cada trozo de la serie original como una columna de una matriz, sobre la que se pasará el GDPC, de modo que estamos utilizando cada intervalo periódico de la serie como una serie independiente para el GDPC. Al ser las series parecidas, lo más probable es que sólo se obtenga una componente principal dinámica, de modo que ésta será la que utilicemos. En caso de que se obtenga más de una, siempre se puede aumentar \texttt{k\_max} o disminuir un poco \texttt{expl\_var} en el algoritmo para obtener una sola componente principal dinámica.\\
 
-Para probar si de hecho se pueden utilizar las componentes principales dinámicas para la detección de patrones o no, se ha hecho un experimento con una serie real que tiene una tendencia periódica. Esta serie es la cantidad de accidentes de coche mensuales en Italia desde enero de 1983 hasta diciembre de 1997, obtenida de la referencia %TODO
-y que se puede ver en la figura \ref{f:accidents}. Como se puede ver esta serie presenta una clara tendencia periódica, lo que tiene sentido porque hay más accidentes en verano que en invierno.
+Para probar si de hecho se pueden utilizar las componentes principales dinámicas para la detección de patrones o no, se ha hecho un experimento con una serie real que tiene una tendencia periódica. Esta serie es la cantidad de accidentes de coche mensuales en Italia desde enero de 1983 hasta diciembre de 1997, obtenida de la referencia \cite{timeS} y que se puede ver en la figura \ref{f:accidents}. Como se puede ver esta serie presenta una clara tendencia periódica, lo que tiene sentido porque hay más accidentes en verano que en invierno.\\
+
+Lo que hacemos ahora es cortar trozos de esta serie de la forma en la que aparece en la figura \ref{f:periodos} de forma que cada serie consta de 13 puntos (la periodicidad en este caso es anual), y los metemos todos en una matriz, por columnas, para obtener la primera componente principal. En este caso se consigue sólo una imponiendo en el algoritmo \texttt{k\_max=5} y \texttt{expl\_var=0.95}. El resultado de esta componente está en la figura \ref{f:accidentsComp}, y es el patrón que se obtiene de la periodicidad de la serie.\\
 
 \begin{figure}[]
  \includegraphics[width=\textwidth, height=0.4\textheight]{../imagenes/accidents.pdf}
  \caption{Número mensual de accidentes de coche en Italia de 1983 a 1997}
  \label{f:accidents}
 \end{figure}
-
-Lo que hacemos ahora es cortar trozos de esta serie de la forma en la que aparece en la figura \ref{f:periodos} de forma que cada serie consta de 13 puntos, y los metemos todos en una matriz, por columnas, para obtener la primera componente principal. En este caso se consigue sólo una imponiendo en el algoritmo \texttt{k\_max=5} y \texttt{expl\_var=0.95}. El resultado de esta componente está en la figura \ref{f:accidentsComp}.
 
 \begin{figure}[]
  \centering
@@ -363,16 +377,9 @@ Lo que hacemos ahora es cortar trozos de esta serie de la forma en la que aparec
  \label{f:accidentsComp}
 \end{figure}
 
-En la figura \ref{f:accidentsComp} obtenemos por tanto un "patrón" del periodo de la serie original. Este patrón se obtiene en el intervalo $[-1, 1]$ y los valores de la serie original son mucho mayores, como se puede ver en la figura \ref{f:accidents}. Por esto, para restarle este patrón a la serie original se ha multiplicado el mismo, en cada intervalo periódico, por la media de la serie original en ese intervalo periódico antes de restarlo. El resultado se puede ver en la figura \ref{f:accidentsSinPatron}.
+\newpage
 
-\begin{figure}[]
- \includegraphics[width=\textwidth, height=0.4\textheight]{../imagenes/accidentsSinPatron.pdf}
- \caption{Serie de accidentes de coche en Italia sin patrón}
- \label{f:accidentsSinPatron}
-\end{figure}
-
-%TODO esto es así?
-
+\newpage
 
 \section{Aplicación: Predicción de un conjunto de series temporales}
 

@@ -16,10 +16,9 @@ Más adelante, vemos una introducción a series temporales, es decir, observacio
 Por último, vemos el análisis de componentes principales dinámico generalizado, que es una aplicación del análisis de componentes principales a series temporales, buscando reducir la dimensión de un conjunto de series temporales buscando las componentes principales, que serán nuevas series, intentando no perder mucha información, aunque en este caso dichas componentes no tienen por qué ser combinaciones lineales de las series temporales originales. La cantidad de información a perder se podrá elegir, de nuevo, en el número de componentes que se desea usar.
 
 \section{Análisis de Componentes Principales}
-%TODO: citar bien
-Para la realización de esta sección sobre análisis de componentes principales se han tenido en cuenta las referencias \cite{anderson} y .\\
+Para la realización de esta sección sobre análisis de componentes principales se han tenido en cuenta las referencias \cite{anderson} y \cite{sanchez}.\\
 
-Supongamos que tenemos un vector de variables aleatorias $X =  (X_1, \dots ,$ $X_n)^T$, donde cada variable aleatoria ha sido obtenida midiendo una cierta información. Teniendo en cuenta que se está midiendo información, es usual que haya gran cantidad de variables y que haya una cierta relación entre ellas. Las componentes principales son un conjunto de combinaciones lineales de las variables originales $X$ que a diferencia de estas están incorreladas entre sí, además de poseer otras propiedades estadísticas. El principal objetivo de las componentes principales es reducir la dimensión original, de forma que haya menos datos que guardar, pero intentando perder la menor cantidad de información posible. Esto se consigue buscando un nuevo sistema de ejes coordenados (que será una rotación del original) llamadas componentes principales, que intentarán explicar la estructura de covarianza del vector aleatorio $X$.\\
+Supongamos que tenemos un vector de variables aleatorias $X =  (X_1, \dots ,$ $X_p)^T$, donde cada variable aleatoria ha sido obtenida midiendo una cierta información. Teniendo en cuenta que se está midiendo información, es usual que haya gran cantidad de variables y que haya una cierta relación entre ellas. Las componentes principales son un conjunto de combinaciones lineales de las variables originales $X$ que a diferencia de estas están incorreladas entre sí, además de poseer otras propiedades estadísticas. El principal objetivo de las componentes principales es reducir la dimensión original, de forma que haya menos datos que guardar, pero intentando perder la menor cantidad de información posible. Esto se consigue buscando un nuevo sistema de ejes coordenados (que será una rotación del original) llamadas componentes principales, que intentarán explicar la estructura de covarianza del vector aleatorio $X$.\\
 
 Vamos a suponer el vector $X$ modelizado por una distribución normal $p$-dimensional de media cero y vamos a construir las componentes principales iterativamente haciendo uso de la técnica de los multiplicadores de Lagrange.\\
 
@@ -356,15 +355,13 @@ Para modelar una serie temporal con uno de los modelos vistos es necesario que l
 o si la serie tiene tendencia periódica
 \[	y_d(t) = y(t) - y(t-s) = (1 - q^{-s})y(t).	\]
 
-Además, si la serie tiene periodo, se suele eliminar también restándoselo a la serie preprocesada en cada periodo. Normalmente esto se hace restando los valores medios en cada periodo.
-
 \newpage
 
-\section{Análisis de Componentes Principales Dinámicos Generalizado}
+\section{Análisis de Componentes Principales Dinámicas Generalizado}
 
-El análisis de componentes principales dinámicos generalizado es una aplicación del análisis de componentes principales a las series temporales, de forma que lo que se intenta es reducir la dimensión de varias series temporales observadas, haciendo que haya que almacenar menos datos, pero intentando perder el mínimo de información posible. Ha sido propuesto por Daniel Peña y Victor J. Yohai ~\cite{pena16}, aunque todavía no se ha publicado. La reducción de dimensión en series temporales es importante porque el número de parámetros en un modelo crece muy rápido a medida que aumenta el número de series que se observan.
+El análisis de componentes principales dinámicas generalizado es una aplicación del análisis de componentes principales a las series temporales, de forma que lo que se intenta es reducir la dimensión de varias series temporales observadas, haciendo que haya que almacenar menos datos, pero intentando perder el mínimo de información posible. Ha sido propuesto por Daniel Peña y Victor J. Yohai ~\cite{pena16}, aunque todavía no se ha publicado. La reducción de dimensión en series temporales es importante porque el número de parámetros en un modelo crece muy rápido a medida que aumenta el número de series que se observan.
 
-\subsubsection{Antecedentes: El método de componentes principales dinámicos de Brillinger}
+\subsubsection{Antecedentes: El método de componentes principales dinámicas de Brillinger}
 
 Antes del método propuesto por Peña y Yohai, se han propuesto otros métodos para reducir dimensión en series temporales y para predicción y reconstrucción de las mismas. Entre ellos cabe destacar el método de Brillinger, por ser uno de los que más está basado en el análisis de componentes principales básico, y por ser el que toma de base el procedimiento de Peña.\\
 
@@ -394,6 +391,12 @@ De esta forma, el error cuadrático medio con $k$ leads se define como:
 \end{equation}
 
 y los valores óptimos para $\mathbf{f},\ \beta$ y $\alpha$ se obtendrán donde el MSE alcance el mínimo.\\
+
+En caso de que se disponga de más de una componente principal dinámica, supongamos $p$ componentes, entonces la reconstrucción de cada una de ellas sería, con $1 \leq r \leq p$,
+\[	\widehat{z}_{j,t}^r = \sum_{i=0}^k \beta_{j,i+1}^rf_{t+i}^r + \alpha_j^r,	\]
+y la reconstrucción de las series originales pasaría a ser:
+\[	\widehat{z}_{j,t} = \sum_{r=1}^p \widehat{z}_{j,t}^r.	\]
+
 
 \subsection{Algoritmo iterativo para las componentes principales dinámicas}
 
@@ -425,7 +428,7 @@ y sea $\mathbf{D}_j(\beta_j) = (d_{j,t,q,}(\beta_j))$ la matriz $(T+k) \times (T
 Podemos definir 
 \[	\mathbf{D}(\beta) = \sum_{j=1}^m \mathbf{D}_j(\beta_j).	\]
 
-Derivando la expresión (\ref{MSE}) con respecto a $f_t$ obtenemos que la primera componente principal dinámica es: %TODO: hacer si me da tiempo
+Derivando la expresión (\ref{MSE}) con respecto a $f_t$, demostración que se puede encontrar en \cite{penaMas} obtenemos que la primera componente principal dinámica es:
 \begin{equation}\label{eq:deff}
 	\mathbf{f} = \mathbf{D}(\beta)^{-1} \sum_{j=1}^m \mathbf{C}_j(\alpha)\beta_j.
 \end{equation}

@@ -19,12 +19,15 @@
 \end{center}
 
 %\vspace{0.7cm}
-\noindent{\textbf{Palabras clave}: palabra\_clave1, palabra\_clave2, palabra\_clave3, ......}\\
+\noindent{\textbf{Palabras clave}: reducción de dimensión, análisis de componentes principales, series temporales, predicción de series temporales, compresión de imágenes.}\\
 
 \vspace{0.7cm}
 \noindent{\textbf{Resumen}}\\
 
-Poner aquí el resumen.
+En el presente trabajo se expone una nueva forma de reducción de dimensión en el contexto de series temporales dada por Peña y Yohai en \cite{pena16} y una serie de aplicaciones a la misma interesantes en dicho contexto. Para ello, comenzamos hablando del análisis de componentes principales, uno de los métodos más importantes y más conocidos en la reducción de dimensiones de un conjunto de datos, por ser uno de los métodos en los que se basa en análisis de componentes principales dinámicas generalizado o GDPC, por sus siglas en inglés. De esta forma, dedicamos la primera parte del capítulo \ref{ch:matematicas} al estudio del análisis de componentes principales, dando los fundamentos matemáticos y las demostraciones del mismo. Después damos una breve introducción a las series temporales y a los más básicos modelos lineales que hay para modelarlas, ya que serán de utilidad más adelante. La última parte del capítulo \ref{ch:matematicas} se dedica al algoritmo GDPC, dando los pasos de Peña y Yohai para calcular las componentes principales dinámicas que ellos definen y se comenta el análisis de componentes principales de Brillinger, otro de los puntos de partida de Peña y Yohai, dando las principales diferencias y ventajas entre el generalizado y el de Brillinger y el análisis de componentes principales.\\
+
+La segunda parte del trabajo se centra en buscar y probar algunas aplicaciones del GDPC, además de hacer un estudio de los parámetros del mismo que influyen en el tiempo de ejecución. Para esta parte se ha utilizado el paquete en desarrollo en \cite{ezeq}. La primera de las aplicaciones es la compresión de imágenes, y aunque no se pretende dar un método de compresión que mejore los ya existentes (los tiempos de cómputo son muy altos comparando con el algoritmo de compresión JPEG, por ejemplo, y la calidad es peor), sirve para entrar en contacto con el método y llegar a entender mejor su funcionamiento. Las otras dos aplicaciones mostradas y llevadas a cabo sí se pueden utilizar dentro del contexto de series temporales y han resultado ser muy interesantes. La primera de ellas es la búsqueda de patrones periódicos en series temporales periódicas, una práctica llevada a cabo a menudo en análisis de series temporales. Es interesante porque se pueden llegar a conseguir patrones con un preprocesamiento mínimo y automático de la serie original. La última aplicación es la predicción de un determinado número de valores de un conjunto de series temporales. Esta es la aplicación más importante a la que se ha llegado, porque permite predecir valores de un conjunto amplio de series temporales (de hecho, tan grande como se quiera), que es la práctica más común en series temporales, prediciendo valores de un conjunto muy reducido de series: las componentes principales dinámicas. Es decir, lo que se hace es utilizar los modelos existentes para predecir los siguientes valores de las componentes principales dinámicas para después volver hacia atrás con una pequeña modificación del método de reconstrucción de las series originales utilizando las componentes principales dinámicas con las predicciones. Esta aplicación, además, ha resultado dar unos resultados buenos utilizando sólo los modelos lineales más simples para la parte de predicción de nuevos valores.
+
 \cleardoublepage
 
 
@@ -32,26 +35,38 @@ Poner aquí el resumen.
 
 
 \begin{center}
-{\large\bfseries Project Title: Project Subtitle}\\
+{\large\bfseries Generalized Dynamic Principal Components Analysis and its applications}\\
 \end{center}
 \begin{center}
 	\myName	\\
 \end{center}
 
 %\vspace{0.7cm}
-\noindent{\textbf{Keywords}: Keyword1, Keyword2, Keyword3, ....}\\
+\noindent{\textbf{Keywords}: dimension reduction, Principal Component Analysis, time series, time series prediction, image compression}\\
 
 \vspace{0.7cm}
 \noindent{\textbf{Abstract}}\\
 
-Write here the abstract in English.
+In this work we explain a new way of dimension reduction in the context of time series analysis, given by Peña and Yohai in \cite{pena16}, called Generalized Dynamic Principal Components, or GPDC. Besides, we give differents applications of the GDPC, which are interesting in the context of time series analysis. In order to give and explain this applications, and do a few examples of each one of them, we start explaining the Principal Component Analysis, or PCA, one of the most important and one of the best known procedures in the context of dimension reduction as well as this is one of the procedures in which the Generalized Dynamic Principal Component is based. Therefore, we dedicate the first section of the chapter \ref{ch:matematicas} to study the Principal Component Analysis, given the mathematical fundaments and the proofs of this procedure.\\
+
+Dimension reduction has become, in recent years, in one of the most important problems of the computer science, since every day more information is stored and we need to deal and work with large quantities of data, being required to lost some parts of the information in order to be able to work with it. Principal Component Analysis give us a way to do that. In rough outlines, if we have a data set of $n$ dimensions, PCA searches for a new set of axis, for example $m$ new axis, rotations of the old ones, with $m \leq n$. That way, the data set in the new axis has only $m$ dimensions. The number $m$ can be chosen based on the amount of information we are willing to lose. By intuition, as more correlated are the data, fewer axis, that is, fewer principal components, will be necessary to use.\\
+
+Now, one of the ways of storing larges amounts of data is when we store consecutive values (usually taken in regular time intervals) of a random variable, for example, the number of cars sold in a city every month or the number of deaths in a city every month or every year. There are a lot of possibilities and work with this kind of information help us to predict what is going to happen in short-term. This kind of information stored is called time series and we dedicate the second section of the chapter \ref{ch:matematicas} to introduce the basics of them.\\
+
+Besides, it is also interesting to reduce the dimension of time series because usually several time series are correlated between each other, like the number or car crashes in a city, the number or mortal diseases in the same city and the number of deaths in the same city. When we have a lot of data (for example, suppose we have the three series we just mention since 1700) and a lot of series that are correlated, is better to reduce the dimension and work with reduced data sets. This is the base of the Generalized Dynamic Principal Component, to reduce the dimension in several time series. We dedicate the rest of the chapter \ref{ch:matematicas} to this procedure. We summarize the paper of Peña and Yohai (\cite{pena16}).\\
+
+We focus the second part of this work in searching and testing differents applications of the GDPC, in addition to do a study of what parameters has influence in the time that the procedure takes to finish. We do all the test with a development version of the GPDC given by Ezequiel Smucler in \cite{ezeq}. The first application of the GPDC is in image compression. Although we don't pretend to give a method which beats one that already exists (for example, the time that it takes to compress a image with GPDC is way long that the time that it takes to compress a image with JPEG, and the quality of the resulting image is better with JPEG than with GDPC). However, this application help us to understand completely the procedure of Generalized Dynamic Principal Components and to make contact with the package in R given by Ezequiel Smucler. We develop this application in the second part of chapter \ref{ch:informatica}.\\
+
+The other two applications shown can be used in a time series context and in fact, they have proved to give good results. The second one is searching patterns in periodic time series, which is a practise performed often in time series analysis. This application is interesting because we can find patterns with a minimum and automatic pre-processing of the original time serie, as we will see in the third section of the chapter \ref{ch:informatica}. The last, and most interesting application that we give is the prediction of new values from a given set of time series. This is the most interesting application because it allows to predict $p$ new values from a large set of time series (in fact, it could be as bigger as we want), which is the most commom practise in time series analysis, only predicting $p$ new values of a reduced set of time series: the dynamic principal components. That is, we use the existing models for prediction in order to predict the next $p$ values of every dynamic principal component obtained so we can go back to the original series (plus the $p$ new values predicted) with a small alteration of the method that obtains the reconstructed series, using the dynamic principal components with the $p$ predicted values. This application, furthermore, has proved to give good results even using the simplest lineal models for the prediction of the new values in the dynamic principal components, which could lead us to continue investigating this application.\\
+
+This is one of the future works we give in the chapter \ref{ch:conclusiones}, which closes this work.
 
 \chapter*{}
 \thispagestyle{empty}
 
 \noindent\rule[-1ex]{\textwidth}{2pt}\\[4.5ex]
 
-Yo, \textbf{\myName}, alumna de la titulación \myDegree  de la \textbf{\myFaculty  de la \myUni}, con DNI 75929914, autorizo la
+Yo, \textbf{\myName}, alumna de la titulación \myDegree  de la \textbf{\myFaculty  de la \myUni}, con DNI 75929914Z, autorizo la
 ubicación de la siguiente copia de mi Trabajo Fin de Grado en la biblioteca de ambos centros para que pueda ser
 consultada por las personas que lo deseen.
 
@@ -62,7 +77,7 @@ consultada por las personas que lo deseen.
 \vspace{2cm}
 
 \begin{flushright}
-Granada a X de septiembre de 2016.
+Granada a 8 de septiembre de 2016.
 \end{flushright}
 
 
@@ -86,7 +101,7 @@ que corresponda.
 
 \vspace{0.5cm}
 
-Y para que conste, expide y firma el presente informe en Granada a X de septiembre de 2016.
+Y para que conste, expide y firma el presente informe en Granada a 8 de septiembre de 2016.
 
 \vspace{1cm}
 
@@ -102,5 +117,7 @@ Y para que conste, expide y firma el presente informe en Granada a X de septiemb
        \vspace{1cm}
 
 
-Poner aquí agradecimientos...
+Quería agradecer a la Universidad de Granada y a los profesores de ambas titulaciones por ayudarme a formarme en las dos áreas que siempre he querido. A mi tutor, Héctor Pomares, por ayudarme además a realizar el presente trabajo.\\
+
+Quería agradecer también a mi familia y amigos, sin cuya ayuda y apoyo inestimable no podría haber seguido adelante.
 
