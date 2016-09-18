@@ -58,12 +58,12 @@
 
 \note{El análisis de componentes principales dinámicas generalizado es un método para reducir la dimensión de un conjunto de series temporales que normalmente tienen algo en común. Para poder cumplir este objetivo ha sido necesario entender el análisis de componentes principales, que es uno de los métodos más conocidos de reducción de dimensión, por ser en el que se basa el GDPC. Además, se ha necesitado tener una base de conocimientos sobre series temporales: qué son y cómo se pueden llegar a modelar.\\
 En cuanto a las aplicaciones, se han llevado a cabo la compresión de imágenes, la detección de patrones en series periódicas y la predicción de nuevos valores. Con la aplicación a compresión de imágenes no se pretendía mejorar ninguno de los algoritmos ya presentes, sino utilizarlo para terminar de comprender el método, ya que se pueden hacer muchas pruebas fáciles de ver al estar tratando con imágenes.}
-\note{Aun así, se han conseguido mejores resultados comprimiendo imágenes que los que se esperaban inicialmente. La segunda aplicación permite detectar patrones en series periódicas con un mínimo preprocesamiento de la serie original, lo que aventaja a otros métodos de detección de patrones. La tercera aplicación es la más interesante en tanto a que se pueden predecir nuevos valores, que es una de las prácticas más comunes del análisis de series temporales, de un conjunto de series temporales tan grande como se quiera prediciendo valores de un conjunto muy reducido: las componentes principales dinámicas.}
+\note{Aun así, se han conseguido mejores resultados comprimiendo imágenes que los que se esperaban inicialmente. La segunda aplicación permite detectar patrones en series periódicas con un mínimo preprocesamiento de la serie original, lo que aventaja a otros métodos de detección de patrones. La tercera aplicación es la más interesante en tanto a que se pueden predecir nuevos valores, que es una de las prácticas más comunes del análisis de series temporales, de un conjunto de series temporales tan grande como se quiera prediciendo valores de un conjunto muy reducido: las componentes principales dinámicas. Este primer objetivo global corresponde a la parte matemática del trabajo y el segundo, a la informática.}
 
 \section{Contenido matemático}
 
 \begin{frame}{Análisis de componentes principales}
-Sea $X = (X_1, X_2, \dots, X_p)^T$ un vector de variables aleatorias que suponemos con media cero con matriz de covarianzas $\Sigma$ semidefinida positiva y con $\lambda_1 \leq \dots \leq \lambda_p \leq 0$ las raíces características de $\Sigma$.\\
+Sea $X = (X_1, X_2, \dots, X_n)^T$ un vector de variables aleatorias que suponemos con media cero con matriz de covarianzas $\Sigma$ semidefinida positiva y con $\lambda_1 \leq \dots \leq \lambda_p \leq 0$ las raíces características de $\Sigma$.\\
 
 Las componentes principales son combinaciones lineales de $(X_1, \dots, X_p)$: si $l_i^T=(l_{i1}, l_{i2}, \dots, l_{ip})$, $i=1,\dots,p$ son vectores, las componentes principales son
 \begin{equation*}
@@ -77,20 +77,22 @@ Las componentes principales son combinaciones lineales de $(X_1, \dots, X_p)$: s
 \end{equation*}
 \end{frame}
 
+\note{El análisis de componentes principales es entonces un método para reducir la dimensión de un conjunto de datos. Si se tienen $m$ datos de dimensión $n$, el análisis de componentes principales busca unos nuevos ejes, las componentes principales, que son una rotación de los antiguos, de forma que los datos representados en estos nuevos $p$ ejes tendrán sólo $p$ dimensiones. Los datos se suponen con media cero por simplicidad, ya que no es algo difícil de conseguir. Las componentes principales se buscan como combinaciones lineales de los datos originales, de forma que maximicen su varianza.}
+
 \begin{frame}{Análisis de componentes principales}
 Se impone que el módulo de los vectores $l_i,\ i=1,\dots,p$ sea uno, que las combinaciones lineales $Y_i$ sean incorreladas entre sí y que cada $Y_i$ maximice su varianza, problemas que se resolverán con multiplicadores de Lagrange.\\
 Se demuestra que $Y_1 = e_1^TX$, con $e_1^Te_1=1$, $e_1$ el vector propio asociado al mayor valor propio $\lambda_1$ de $\Sigma$ y $\text{var}(Y_1) = \lambda_1$. Del mismo modo, $Y_{r+1} = e_{r+1}^T X$, con $e_{r+1}$ el vector propio asociado al valor propio $\lambda_{r+1}$, $\text{var}(Y_{r+1})$ y $1 \leq r+1 \leq p$.
 
 \end{frame}
 
-\note{El número de componentes, $p$, que se pueden obtener se puede fijar en función de la cantidad de información que se está dispuesto a perder.\\
+\note{Está demostrado en la memoria que la primera componente principal es el vector propio de la matriz de covarianzas asociado al mayor valor propio, la segunda componente principal es el vector propio asociado al segundo mayor valor propio, etc. El número de componentes, $p$, que se pueden obtener se puede fijar en función de la cantidad de información que se está dispuesto a perder.\\
 
 De esta forma, se obtienen vectores indicando la máxima varianza de los datos, que son incorrelados entre sí, es decir, ortogonales, que funcionan como un nuevo sistema de ejes. Así, se pueden obtener las coordenadas de los datos en este nuevo sistema de ejes, que tendrán $p$ componentes, con $p$ menor que el número de componentes original, reduciendo la dimensión de los datos.}
 
 \begin{frame}{Series temporales}
 Una \textbf{serie temporal} es un conjunto de observaciones de valores de una variable generadas secuencialmente en el tiempo, normalmente a intervalos regulares: $\{y(t);\ t=1,2,\dots,N\}$.\\
 
-Cuando una serie temporal es \textbf{estacionaria}, la media y la varianza de la misma son constantes y la covarianza entre dos muestras de la varible, $y(t)$ e $y(t+k)$ sólo depende de $k$, es decir, las propiedades estadísticas son independientes del instante de tiempo en el que se observan las muestras.\\
+Cuando una serie temporal es \textbf{estacionaria}, la media y la varianza de la misma son constantes y la covarianza entre dos muestras de la variable, $y(t)$ e $y(t+k)$ sólo depende de $k$.\\
 
 La \textbf{ecuación general para modelar una serie temporal} es
 \begin{equation}
@@ -101,7 +103,8 @@ Hay muchos tipos de modelos de series temporales: lineales, como los modelos AR,
 \end{frame}
 
 \note{Es interesante construir modelos para representar la evolución de una serie temporal, de forma que se puedan hacer predicciones sobre valores futuros de la misma. Estos modelos se basan en valores pasados de la serie y en la hipótesis de que las condiciones futuras serán análogas a las pasadas.\\
-$e(t)$ es un componente aleatorio que recoge el resto de efectos que actúan sobre la serie, sobre el que se supone que las variables son independientes entre sí y que siguen una distribución normal de media cero y varianza constante, es decir, un ruido blanco.\\
+$e(t)$ es un componente aleatorio que recoge el resto de efectos que actúan sobre la serie, sobre el que se supone que las variables son independientes entre sí y que siguen una distribución normal de media cero y varianza constante.\\
+
 Aunque hay muchos tipos de modelos para una serie temporal, en el trabajo sólo se desarrollan con un poco de profundidad los modelos AR o auto-regresivos, MA o de medias móviles y ARMA, por ser los modelos lineales más sencillos y los que se han utilizado en la segunda parte del trabajo. Para utilizar dichos métodos es necesario que la serie que se quiere modelar sea estacionaria.}
 
 \begin{frame}{Análisis de componentes principales dinámicas generalizado}
@@ -172,7 +175,7 @@ Imagen     & 256 & 32 & 7.41   & Imagen     & 32  & 256 & 6.88   &            & 
 \begin{frame}{Análisis de tiempos del algoritmo GDPC}
 \begin{table}[]
 \centering
-\caption{Tiempos en imágenes}
+\caption{Extracto de tiempos en imágenes}
 \label{tiemposimg}
 \resizebox{\textwidth}{!}{\begin{tabular}{|cccc|cccc|cccc|}
 \hline
@@ -206,7 +209,7 @@ ncores & T   & m  & Tiempo & ncores & T   & m   & Tiempo  & ncores & T   & m   &
 \end{figure}
 \end{frame}
 
-\note{Todas las imágenes se han hecho explicando un mínimo de 0.95 de varianza de las series, con un k máximo de 5 para no aumentar mucho el tiempo de ejecución y cogiendo como series las columnas de la imagen.}
+\note{Todas las imágenes se han hecho explicando un mínimo de 0.95 de varianza de las series, con un k máximo de 5 para no aumentar mucho el tiempo de ejecución y cogiendo como series las columnas de la imagen. Aquí vemos la imagen en blanco y negro que se ha utilizado. Se han hecho pruebas con esta y con dos imágenes a color. Vemos aquí la reconstrucción de la imagen habiendo cogido como series temporales las columnas de la imagen. La función para reconstruir las series temporales originales con una y con varias componentes principales está hecha por mí y se puede encontrar en mi git.}
 
 \begin{frame}{Aplicación a compresión de imágenes}
 \begin{figure}
@@ -222,7 +225,7 @@ ncores & T   & m  & Tiempo & ncores & T   & m   & Tiempo  & ncores & T   & m   &
 \end{figure}
 \end{frame}
 
-\note{Para las imágenes en color se ha hecho lo mismo pero a cada canal de color R, G y B. Como la reconstrucción de las imágenes no tiene por qué devolver valores en el rango [0,1], de hecho las imágenes originales estaban en el intervalo [0,255], se ha transformado el intervalo [min,max] de cada matriz en el intervalo [0,1] con una función de R hecha por mí. La función para reconstruir las series originales a partir de varias componentes principales dinámicas también está hecha por mí y se puede encontrar en mi git.\\
+\note{Para las imágenes en color se ha hecho lo mismo pero a cada canal de color R, G y B. Como la reconstrucción de las imágenes no tiene por qué devolver valores en el rango [0,1], de hecho las imágenes originales estaban en el intervalo [0,255], se ha transformado el intervalo [min,max] de cada matriz en el intervalo [0,1] con una función de R hecha por mí.\\
 
 En esta imagen podemos ver que no por ser la imagen más simple se obtienen mejores resultados. De hecho, si los cambios en el color o el tono de la imagen son suaves, normalmente no se ven reflejados en las series reconstruidas porque la varianza de los datos ahí es muy pequeña.}
 
@@ -293,7 +296,7 @@ Lena                        &         & 512 & 512 & 12                          
 \end{table}
 \end{frame}
 
-\note{Efectivamente, hacen falta la casi mitad de componentes para una imagen casi el doble de grande que la del tigre. El factor de compresión depende de lo simple que sea la imagen y de lo grande que sea también, pero aquí hemos obtenido como mínimo un factor de compresión de más de 3. Esta tabla está obtenida según los número que hace falta guardar en cada caso, teniendo en cuenta que las imágenes originales son matrices y que las comprimidas son las componentes principales dinámicas junto con sus matrices y vectores de coeficientes.}
+\note{Efectivamente, hacen falta casi la mitad de componentes para una imagen casi el doble de grande que la del tigre. El factor de compresión depende de lo simple que sea la imagen y de lo grande que sea también, pero aquí hemos obtenido como mínimo un factor de compresión de más de 3. Esta tabla está obtenida según los números que hace falta guardar en cada caso, teniendo en cuenta que las imágenes originales son matrices y que las comprimidas son las componentes principales dinámicas junto con sus matrices y vectores de coeficientes.}
 
 \begin{frame}{Aplicación a compresión de imágenes}
 \begin{figure}
@@ -328,7 +331,7 @@ Lena                        &         & 512 & 512 & 12                          
 \end{figure}
 \end{frame}
 
-\note{También se ha probado a mostrar el resultado de la imagen recomponiéndola utilizando las sucesivas componentes, acumulándolas. Aquí podemos ver las reconstrucciones con la primera componente sólo, con las componentes de la 1 a la 6 y con las componentes de la 1 a la 12, y podemos ver la mejora que hay según se va añadiendo la información que aporta cada componente principal dinámica.}
+\note{Como se ha dicho anteriormente, si se tiene más de una componente principal dinámica, la reconstrucción de las series originales se lleva a cabo sumando la información que aporta para cada casilla de la matriz cada componente principal dinámica. Esto se ve muy bien con imágenes, porque es fácil visualizar los resultados. Aquí podemos ver las reconstrucciones con la primera componente sólo, con las componentes de la 1 a la 6 y con las componentes de la 1 a la 12, y podemos ver la mejora que hay según se va añadiendo la información que aporta cada componente principal dinámica.}
 
 \begin{frame}{Aplicación a detección de patrones en series temporales periódicas}
 \begin{figure}[]
@@ -338,7 +341,7 @@ Lena                        &         & 512 & 512 & 12                          
 \end{figure}
 \end{frame}
 
-\note{Esta aplicación es interesante porque se pueden obtener patrones de series periódicas, que es una práctica común cuando se quiere descomponer una serie en parte periódica, tendencia, estacionaria, etc., con un procesamiento mínimo y automático de la serie. Lo que se hace es partir la serie original en intervalos periódicos y tratar cada intervalo como una serie independiente. Por ejemplo aquí esta serie tiene periodicidad anual, porque lo que cogeríamos cada 13 puntos de la serie original, de Enero de un año a Enero del siguiente, y tomaríamos cada 13 datos como series independientes.}
+\note{Esta aplicación es interesante porque se pueden obtener patrones de series periódicas, que es una práctica común cuando se quiere descomponer una serie en parte periódica, tendencia, estacionaria, etc., con un preprocesamiento mínimo y automático de la serie. Lo que se hace es partir la serie original en intervalos periódicos y tratar cada intervalo como una serie independiente. Por ejemplo aquí esta serie tiene periodicidad anual, porque lo que cogeríamos cada 13 puntos de la serie original, de Enero de un año a Enero del siguiente, y tomaríamos cada 13 datos como series independientes.}
 
 \begin{frame}{Aplicación a detección de patrones en series temporales periódicas}
 \begin{figure}[]
@@ -357,7 +360,7 @@ Lena                        &         & 512 & 512 & 12                          
 \end{figure}
 \end{frame}
 
-\note{Aquí se muestran los 3 primeros intervalos de 13 puntos de la serie original. Esto se ha hecho implementando una pequeña función en \texttt{R} que devuelve directamente la matriz con las series como columnas. Lo siguiente es poner todas estas series es una matriz, por columnas, y utilizar el algoritmo \texttt{gdpc} de forma que sólo se obtenga una componente principal dinámica. Esto no es difícil puesto que las series deben parecerse mucho entre sí al ser la serie original periódica y aumentando el número de lags a utilizar o disminuyendo un poco la varianza a explicar, se consigue. En este caso, la única componente principal dinámica es la que aparece en la siguiente diapositiva.}
+\note{Aquí se muestran los 3 primeros intervalos de 13 puntos de la serie original. Esto se ha hecho implementando una pequeña función en \texttt{R} que devuelve directamente la matriz con las series como columnas. Lo siguiente es poner todas estas series en una matriz, por columnas, y utilizar el algoritmo \texttt{gdpc} de forma que sólo se obtenga una componente principal dinámica. Esto no es difícil puesto que las series deben parecerse mucho entre sí al ser la serie original periódica y aumentando el número de lags a utilizar o disminuyendo un poco la varianza a explicar, se consigue. En este caso, la única componente principal dinámica es la que aparece en la siguiente diapositiva.}
 
 \begin{frame}{Aplicación a detección de patrones en series temporales periódicas}
 \begin{figure}[]
