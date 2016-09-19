@@ -12,7 +12,7 @@
 \usetheme{CambridgeUS}
 \usecolortheme{seahorse}
 
-\setbeameroption{show notes} %un-comment to see the notes
+%\setbeameroption{show notes} %un-comment to see the notes
 
 \AtBeginSection[]{
   \begin{frame}
@@ -81,7 +81,7 @@ Las componentes principales son combinaciones lineales de $(X_1, \dots, X_p)$: s
 
 \begin{frame}{Análisis de componentes principales}
 Se impone que el módulo de los vectores $l_i,\ i=1,\dots,p$ sea uno, que las combinaciones lineales $Y_i$ sean incorreladas entre sí y que cada $Y_i$ maximice su varianza, problemas que se resolverán con multiplicadores de Lagrange.\\
-Se demuestra que $Y_1 = e_1^TX$, con $e_1^Te_1=1$, $e_1$ el vector propio asociado al mayor valor propio $\lambda_1$ de $\Sigma$ y $\text{var}(Y_1) = \lambda_1$. Del mismo modo, $Y_{r+1} = e_{r+1}^T X$, con $e_{r+1}$ el vector propio asociado al valor propio $\lambda_{r+1}$, $\text{var}(Y_{r+1})$ y $1 \leq r+1 \leq p$.
+Se demuestra que $Y_1 = e_1^TX$, con $e_1^Te_1=1$, $e_1$ el vector propio asociado al mayor valor propio $\lambda_1$ de $\Sigma$ y $\text{var}(Y_1) = \lambda_1$. Del mismo modo, $Y_{r+1} = e_{r+1}^T X$, con $e_{r+1}$ el vector propio asociado al valor propio $\lambda_{r+1}$, $\text{var}(Y_{r+1}) = \lambda_{r+1}$ y $1 \leq r+1 \leq p$.
 
 \end{frame}
 
@@ -299,22 +299,6 @@ Lena                        &         & 512 & 512 & 12                          
 \note{Efectivamente, hacen falta casi la mitad de componentes para una imagen casi el doble de grande que la del tigre. El factor de compresión depende de lo simple que sea la imagen y de lo grande que sea también, pero aquí hemos obtenido como mínimo un factor de compresión de más de 3. Esta tabla está obtenida según los números que hace falta guardar en cada caso, teniendo en cuenta que las imágenes originales son matrices y que las comprimidas son las componentes principales dinámicas junto con sus matrices y vectores de coeficientes.}
 
 \begin{frame}{Aplicación a compresión de imágenes}
-\begin{figure}
- \centering
-  \subfloat[Imagen reconstruida por columnas]{
-   \label{f:lena095C}
-    \includegraphics[width=0.45\textwidth]{../imagenes/lena095.pdf}}
-  \subfloat[Imagen reconstruida por filas]{
-   \label{f:lena095}
-    \includegraphics[width=0.45\textwidth]{../imagenes/lenaFilas095.pdf}}
- \caption{Reconstrucciones de Lena}
- \label{f:comparativaFilas}
-\end{figure}
-\end{frame}
-
-\note{También se ha probado a reconstruir por series y por filas las imágenes. Hay diferencias pero no son significativas en tanto que se está explicando el mismo porcentaje de varianza. Sí es verdad que hay partes más nítidas es una imagen que en otra.}
-
-\begin{frame}{Aplicación a compresión de imágenes}
 \begin{figure}[]
  \centering
   \subfloat[Componente 1]{
@@ -431,7 +415,7 @@ Con series de 5 valores y reconstruyendo con $k=4$ leads, si queremos obtener el
 
 \begin{frame}
 \begin{enumerate}
-\item Como se había previsto, la aplicación a compresión de imágenes no nos ha dado un método real que se pueda utilizar en compresión puesto que el tiempo, como se ha visto, en comprimir una imagen es demasiado alto comparado con la calidad que se obtiene, aunque se han obtenido mejores resultados que los que se pensaba inicialmente. Aun así, ha servido para terminar de entender el método GDPC.
+\item Se ha estudiado si esta nueva técnica se puede utilizar en compresión de imágenes y se han realizado experimentos que han dado mejores resultados que los que se esperaban inicialmente. Aun así, el tiempo en comprimir una imagen es alto para esta aplicación.
 \item Se pueden, a partir de ahora, seguir buscando aplicaciones de dicho método.
 \item Conviene también seguir experimentando para mejorar las dos últimas aplicaciones. Especialmente utilizar otros métodos de predicción más avanzados a la hora de predecir valores de las componentes principales dinámicas para mejorar la predicción del conjunto de series originales.
 \end{enumerate}
